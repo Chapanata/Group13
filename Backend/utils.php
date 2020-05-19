@@ -10,4 +10,5 @@ function closeConnectionAndDie($conn)
     $conn->close();
     die();
 }
+
 ?>

@@ -1,3 +1,9 @@
+<?php
+
+// Contains Login Form
+// Checks for valid session
+// Reauthenticates if session variable is active
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

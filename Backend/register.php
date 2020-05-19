@@ -1,5 +1,5 @@
 <?php
-
+include 'dtb.php';
 include 'utils.php';
 include 'confirmCodeEmailTemplate.php';
 
@@ -52,7 +52,7 @@ if (filter_var($Email, FILTER_VALIDATE_EMAIL) == FALSE)
 }
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = dbConnection();
 // Check connection
 if ($conn->connect_error) {
     error("Internal Error");
