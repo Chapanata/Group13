@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="jquery-3.5.1.min.js"></script>
+        <script src="JS/script.js"></script>
+        <title>Contact Manager Deluxe&#8482</title>
+        <link rel="stylesheet" type="text/css" href="CSS/normalize.css">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="CSS/style.css">
+    <body>
+        <div class="login-background">
+        <!-- Login -->
+            <div class="button-select">
+                <div id="button-color"></div>
+                <button type="button" class="toggle-log" onclick="login()">Login</button>
+                <button type="button" class="toggle-reg" onclick="register()">Register</button>
+            </div>
+                <div class="login-box"> <!-- Our Front -->
+                    <img src="CSS/Logo.png" class="logo">
+
+                    <form id="login" class="input-group">
+                        <div class="input-box">
+                            <input type="text" name="username" placeholder="Username" required>
+
+                        </div>
+                        <div class="input-box">
+                            <input type="password" name="password" placeholder="Password" required>
+
+                        </div>
+                        <input type="button" name="" value="Sign In">
+                    </form>
+                    
+                    <!-- Register -->
+                    
+                    <form id="register" class="register-group">
+                        <div class="register-box">
+                            <input type="text" name="username" placeholder="Username" required>
+                            <input type="email" name="username" placeholder="E-mail Address" required>
+                            <input type="password" name="password" placeholder="Password" required>
+                            <input type="button" name="" value="Register">
+                        </div>
+                    </form>
+                    
+                    <a class="forgot" href="#">Forgot Password?</a>
+                </div>
+
+            <script>
+            var x = document.getElementById("login");
+            var y = document.getElementById("register");
+            var z = document.getElementById("button-color");
+            
+            function register() {
+                x.style.left = "-400px";
+                y.style.left= "50px";
+                z.style.left="200px";
+            }    
+            
+            function login() {
+                x.style.left = "-400px";
+                y.style.left= "50px";
+                z.style.left="0";
+            }
+                
+            </script>
+
+    </div>        
+    </body>
+    </head>
+</html>
