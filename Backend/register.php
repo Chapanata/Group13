@@ -1,7 +1,7 @@
 <?php
 include 'connection.php';
 include 'confirmCodeEmailTemplate.php';
-include 'config.php';
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -20,14 +20,8 @@ header('Content-Type: application/json');
 // Read raw data from the request
 $json = file_get_contents('php://input');
 $data = json_decode($json);
-
 // Confirm required data
-if(isset($data->Email) == FALSE || isset($data->Username) == FALSE || isset($data->Password) == FALSE)
-{
-    // do something
-    error("Missing Parameters");
-    die();
-}
+
 
 // Get data
 $Email = $data->Email;
@@ -35,39 +29,28 @@ $Username = $data->Username;
 // Hash password
 $Password = md5($data->Password);
 
-// Confirm email
-if (filter_var($Email, FILTER_VALIDATE_EMAIL) == FALSE)
-{
-    error("Email is not valid");
-    die();
-}
+echo $Email;
+echo $Username;
+echo $Password;
 
 // Create connection
 $conn = dbConnection();
-// Check connection
-if ($conn->connect_error) {
-    error("Internal Error");
-    closeConnectionAndDie($conn);
-}
+$UsersTbl = $GLOBALS['table_users'];
 
 // Check if user exists
-$result = $conn->prepare("SELECT FIRST FROM $table_users WHERE Username='$Username'")->execute();
+$result = $conn->prepare("SELECT Username FROM $UsersTbl WHERE Username='$Username'");
+$result->execute();
+$amount = $result->rowCount();
 
-if($result == FALSE)
+if($amount > 0)
 {
     error("Internal Error" . $conn->error);
     closeConnectionAndDie($conn);
 }
 
-if(mysqli_num_rows($result) > 0)
-{
-    error("User Exists");
-    closeConnectionAndDie($conn);
-}
-
 // Generate confirm code
 $confirmCode = rand(1000,9999);
-
+/*
 // Send email
 $mail = new PHPMailer;
 $mail->SMTPDebug = 3;
@@ -91,10 +74,14 @@ if(!$mail->send())
     error("Internal Error " . $app_pass . $app_email . $conn->error);
     closeConnectionAndDie($conn);
 }
-
+*/
 // Add user entry
-$result = $conn->prepare("INSERT INTO $table_users (Email, Username, Password, ConfirmCode) VALUES ($Email, $Username, $Password, $confirmCode)")->execute();
+$result = null;
+
+$createUser = $conn->prepare("INSERT INTO $UsersTbl (UserID,Email, Username, Password, ConfirmCode) VALUES (DEFAULT,'$Email', '$Username', '$Password', '$confirmCode')");
+$createUser->execute();
 
 // Close connection
-$conn->close();
+$conn = null;
+
 ?>

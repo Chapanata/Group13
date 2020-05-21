@@ -4,9 +4,8 @@ include 'config.php';
 
 function dbConnection()
 {
-    include 'config.php';
 	// Returns a PHP Data Object containing the Database connection
-	return (new PDO('mysql:host='. $database_host . ';dbname=' . $database_name, $database_user, $database_pass));
+	return (new PDO('mysql:host='.$GLOBALS['database_host']. ';dbname=' . $GLOBALS['database_name'], $GLOBALS['database_user'] , $GLOBALS['database_pass']));
 }
 
 function error($errorMsg)
