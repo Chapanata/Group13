@@ -1,5 +1,7 @@
 <?php
 include 'connection.php';
+include 'data.php';
+
 /* Desription: This sets up our enviornment.
  * Step 1. Setup User table
  *	 - Drop table
@@ -9,10 +11,6 @@ include 'connection.php';
  *	 - Create table
  **/
 // Created by Samuel Arminana (armi.sam99@gmail.com)
-
-$ini = parse_ini_file('php.ini');
-$tableusers = $ini['table_users'];
-$tablecontacts = $ini['table_contacts'];
 
 // Create connection
 $conn = dbConnection();
@@ -26,12 +24,12 @@ if ($conn->connect_error) {
  ********************************************************************/
 // Drop Users table
 $sql =
-    "DROP TABLE `" . $tableusers . "`;";
+    "DROP TABLE `" . $table_users . "`;";
 $conn->query($sql);
 
 // Create Users table
 $sql =
-    "CREATE TABLE `$tableusers` (
+    "CREATE TABLE `$table_users` (
 		`UserID` INT NOT NULL AUTO_INCREMENT,
 		`Username` VARCHAR(26),
 		`Password` VARCHAR(255),
@@ -54,12 +52,12 @@ if ($conn->query($sql) === FALSE)
  ********************************************************************/
 // Drop Contacts table
 $sql =
-    "DROP TABLE `" . $tablecontacts . "`;";
+    "DROP TABLE `" . $table_contacts . "`;";
 $conn->query($sql);
 
 // Create Contacts table
 $sql =
-    "CREATE TABLE `" . $tablecontacts . "` (
+    "CREATE TABLE `" . $table_contacts . "` (
 		`UserID` INT NOT NULL AUTO_INCREMENT,
 		`OwnerID` INT,
 		`FirstName` VARCHAR(255),

@@ -9,15 +9,11 @@ require 'phpMailer/Exception.php';
 require 'phpMailer/PHPMailer.php';
 require 'phpMailer/SMTP.php';
 
+include 'data.php';
+
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
 */
-
-$ini = parse_ini_file('php.ini');
-$tableusers = $ini['table_users'];
-$tablecontacts = $ini['table_contacts'];
-$fromEmail = $ini['app_email'];
-$fromEmailPass = $ini['app_pass'];
 
 // Read raw data from the request
 $json = file_get_contents('php://input');
@@ -49,7 +45,7 @@ if ($conn->connect_error) {
 }
 
 // Check if user exists
-$result = $conn->query("SELECT * FROM $tableusers WHERE Username='$Username'");
+$result = $conn->query("SELECT * FROM $table_users WHERE Username='$Username'");
 
 if($result == FALSE)
 {
@@ -73,11 +69,11 @@ $mail->isSMTP();
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Host = "smtp.gmail.com";
 $mail->SMTPAuth = true;
-$mail->Username = $fromEmail;
-$mail->Password = $fromEmailPass;
+$mail->Username = $app_email;
+$mail->Password = $app_pass;
 $mail->Port = 587;
 
-$mail->From = $fromEmail;
+$mail->From = $app_email;
 $mail->addAddress($Email);
 $mail->isHTML(true);
 $mail->Subject = "Your Registration to POOP";
@@ -86,12 +82,12 @@ $mail->AltBody = "Your confirmation code is " . $confirmCode;
 
 if(!$mail->send())
 {
-    error("Internal Error 2 " . $fromEmailPass . $fromEmail . $conn->error);
+    error("Internal Error 2 " . $app_pass . $app_email . $conn->error);
     closeConnectionAndDie($conn);
 }
 
 // Add user entry
-// TODO
+$result = $conn->query("INSERT INTO $table_users FROM WHERE Username='$Username'");
 
 // Close connection
 $conn->close();
