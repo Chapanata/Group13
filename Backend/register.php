@@ -1,5 +1,5 @@
 <?php
-include 'dtb.php';
+include 'connection.php';
 include 'confirmCodeEmailTemplate.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
