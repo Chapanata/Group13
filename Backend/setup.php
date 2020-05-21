@@ -1,6 +1,6 @@
 <?php
 include 'connection.php';
-include 'data.php';
+include 'config.php';
 
 /* Desription: This sets up our enviornment.
  * Step 1. Setup User table

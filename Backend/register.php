@@ -1,6 +1,7 @@
 <?php
-include 'dtb.php';
+include 'connection.php';
 include 'confirmCodeEmailTemplate.php';
+include 'config.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -9,19 +10,24 @@ require 'phpMailer/Exception.php';
 require 'phpMailer/PHPMailer.php';
 require 'phpMailer/SMTP.php';
 
-include 'data.php';
-
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
-*/
+ */
+
+// Set response header
+header('Content-Type: application/json');
 
 // Read raw data from the request
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
 // Confirm required data
-
-header('Content-Type: application/json');
+if(isset($data->Email) == FALSE || isset($data->Username) == FALSE || isset($data->Password) == FALSE)
+{
+    // do something
+    error("Missing Parameters");
+    die();
+}
 
 // Get data
 $Email = $data->Email;
@@ -45,7 +51,7 @@ if ($conn->connect_error) {
 }
 
 // Check if user exists
-$result = $conn->query("SELECT * FROM $table_users WHERE Username='$Username'");
+$result = $conn->prepare("SELECT FIRST FROM $table_users WHERE Username='$Username'")->execute();
 
 if($result == FALSE)
 {
@@ -82,12 +88,12 @@ $mail->AltBody = "Your confirmation code is " . $confirmCode;
 
 if(!$mail->send())
 {
-    error("Internal Error 2 " . $app_pass . $app_email . $conn->error);
+    error("Internal Error " . $app_pass . $app_email . $conn->error);
     closeConnectionAndDie($conn);
 }
 
 // Add user entry
-$result = $conn->query("INSERT INTO $table_users FROM WHERE Username='$Username'");
+$result = $conn->prepare("INSERT INTO $table_users (Email, Username, Password, ConfirmCode) VALUES ($Email, $Username, $Password, $confirmCode)")->execute();
 
 // Close connection
 $conn->close();
