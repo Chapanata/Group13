@@ -44,7 +44,7 @@ $amount = $result->rowCount();
 
 if($amount > 0)
 {
-    error("Internal Error" . $conn->error);
+    error("User Already Exists");
     closeConnectionAndDie($conn);
 }
 
