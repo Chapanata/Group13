@@ -1,8 +1,10 @@
 <?php
 
-// Contains Login Form
+// Contains Login/Register Form
 // Checks for valid session
 // Reauthenticates if session variable is active
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +18,7 @@
         <div class="login-background">
             <div class="login-box">
                 <img src="CSS/Logo.png" class="logo">
-            <h1>Sign In</h1>
+				<h1>Sign In</h1>
                 <form>
                     <div class="input-box">
                         <label>Username</label>

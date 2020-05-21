@@ -1,5 +1,5 @@
 <?php
-
+include 'connection.php';
 /* Desription: This sets up our enviornment.
  * Step 1. Setup User table
  *	 - Drop table
@@ -11,15 +11,11 @@
 // Created by Samuel Arminana (armi.sam99@gmail.com)
 
 $ini = parse_ini_file('php.ini');
-$servername = $ini['db_server'];
-$username = $ini['db_user'];
-$password = $ini['db_password'];
-$dbname = $ini['db_name'];
 $tableusers = $ini['table_users'];
 $tablecontacts = $ini['table_contacts'];
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = dbConnection();
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -35,7 +31,7 @@ $conn->query($sql);
 
 // Create Users table
 $sql =
-    "CREATE TABLE `" . $tableusers . "` (
+    "CREATE TABLE `$tableusers` (
 		`UserID` INT NOT NULL AUTO_INCREMENT,
 		`Username` VARCHAR(26),
 		`Password` VARCHAR(255),

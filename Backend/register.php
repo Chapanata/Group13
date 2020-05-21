@@ -1,6 +1,5 @@
 <?php
 include 'dtb.php';
-include 'utils.php';
 include 'confirmCodeEmailTemplate.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -10,18 +9,13 @@ require 'phpMailer/Exception.php';
 require 'phpMailer/PHPMailer.php';
 require 'phpMailer/SMTP.php';
 
-/* Desription:
- */
-// Created by Samuel Arminana (armi.sam99@gmail.com)
+/*
+Created by Samuel Arminana (armi.sam99@gmail.com)
+*/
 
 $ini = parse_ini_file('php.ini');
-$servername = $ini['db_server'];
-$username = $ini['db_user'];
-$password = $ini['db_password'];
-$dbname = $ini['db_name'];
 $tableusers = $ini['table_users'];
 $tablecontacts = $ini['table_contacts'];
-
 $fromEmail = $ini['app_email'];
 $fromEmailPass = $ini['app_pass'];
 
@@ -30,11 +24,6 @@ $json = file_get_contents('php://input');
 $data = json_decode($json);
 
 // Confirm required data
-if(isset($data->Email) == FALSE || isset($data->Username) == FALSE || isset($data->Password) == FALSE)
-{
-    error("Missing Parameters");
-    die();
-}
 
 header('Content-Type: application/json');
 
@@ -60,14 +49,14 @@ if ($conn->connect_error) {
 }
 
 // Check if user exists
-$sql =
-    "SELECT * FROM `" . $tableusers . "` WHERE Username='" . $Username . "'";
-$result = $conn->query($sql);
+$result = $conn->query("SELECT * FROM $tableusers WHERE Username='$Username'");
+
 if($result == FALSE)
 {
     error("Internal Error" . $conn->error);
     closeConnectionAndDie($conn);
 }
+
 if(mysqli_num_rows($result) > 0)
 {
     error("User Exists");
