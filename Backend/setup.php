@@ -10,7 +10,6 @@ include 'config.php';
  *	 - Drop table
  *	 - Create table
  **/
-// Created by Samuel Arminana (armi.sam99@gmail.com)
 
 // Create connection
 $conn = dbConnection();
@@ -31,7 +30,6 @@ $conn->query($sql);
 $sql =
     "CREATE TABLE `$table_users` (
 		`UserID` INT NOT NULL AUTO_INCREMENT,
-		`Username` VARCHAR(26),
 		`Password` VARCHAR(255),
 		`Email` VARCHAR(255),
 		`ConfirmCode` INT,

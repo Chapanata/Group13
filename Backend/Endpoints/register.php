@@ -20,25 +20,33 @@ header('Content-Type: application/json');
 // Read raw data from the request
 $json = file_get_contents('php://input');
 $data = json_decode($json);
-// Confirm required data
 
+// Confirm required data
+if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
+{
+    // do something
+    error("Missing Parameters");
+    die();
+}
+
+// Confirm valid email
+if(filter_var($data->Email, FILTER_VALIDATE_EMAIL) == FALSE)
+{
+    error("Email is not valid");
+    die();
+}
 
 // Get data
 $Email = $data->Email;
-$Username = $data->Username;
 // Hash password
 $Password = md5($data->Password);
-
-echo $Email;
-echo $Username;
-echo $Password;
 
 // Create connection
 $conn = dbConnection();
 $UsersTbl = $GLOBALS['table_users'];
 
 // Check if user exists
-$result = $conn->prepare("SELECT Username FROM $UsersTbl WHERE Username='$Username'");
+$result = $conn->prepare("SELECT Email FROM $UsersTbl WHERE Email='$Email'");
 $result->execute();
 $amount = $result->rowCount();
 
@@ -50,23 +58,25 @@ if($amount > 0)
 
 // Generate confirm code
 $confirmCode = rand(1000,9999);
-/*
+
 // Send email
 $mail = new PHPMailer;
-$mail->SMTPDebug = 3;
-$mail->isSMTP();
-$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-$mail->Host = "smtp.gmail.com";
-$mail->SMTPAuth = true;
-$mail->Username = $app_email;
-$mail->Password = $app_pass;
-$mail->Port = 587;
 
-$mail->From = $app_email;
+// Don't use SMTP, just use mail function
+//$mail->SMTPDebug = 3;
+//$mail->isSMTP();
+//$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+//$mail->Host = "smtp.gmail.com";
+//$mail->SMTPAuth = true;
+//$mail->Username = $app_email;
+//$mail->Password = $app_pass;
+//$mail->Port = 587;
+
+$mail->setFrom($app_email, "Contact Manager Deluxe");
 $mail->addAddress($Email);
 $mail->isHTML(true);
-$mail->Subject = "Your Registration to POOP";
-$mail->Body = getEmail($confirmCode);
+$mail->Subject = "Your Registration to Contact Manager Deluxe";
+$mail->Body = getEmail($confirmCode, $Email);
 $mail->AltBody = "Your confirmation code is " . $confirmCode;
 
 if(!$mail->send())
@@ -74,14 +84,16 @@ if(!$mail->send())
     error("Internal Error " . $app_pass . $app_email . $conn->error);
     closeConnectionAndDie($conn);
 }
-*/
+
 // Add user entry
 $result = null;
 
-$createUser = $conn->prepare("INSERT INTO $UsersTbl (UserID,Email, Username, Password, ConfirmCode) VALUES (DEFAULT,'$Email', '$Username', '$Password', '$confirmCode')");
-$createUser->execute();
+$updateUser = $conn->prepare("INSERT INTO $UsersTbl (UserID, Email, Password, ConfirmCode) VALUES (DEFAULT, '$Email', '$Password', '$confirmCode')");
+$updateUser->execute();
 
 // Close connection
 $conn = null;
+
+success(TRUE);
 
 ?>

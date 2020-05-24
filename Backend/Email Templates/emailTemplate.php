@@ -367,12 +367,12 @@ function buildBase($body)
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                    <span class="apple-link">Company Inc, A Non-UCF Affiliate</span>
+                    <span class="apple-link">Contact Manager Deluxe</span>
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block powered-by">
-                    Powered by <a href="">POOP Contact Management Solutions</a>.
+                    Powered by <a href="">LAMP</a>.
                   </td>
                 </tr>
               </table>

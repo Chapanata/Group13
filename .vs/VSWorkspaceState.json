@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Backend",
+    "\\Backend\\Email Templates",
+    "\\Backend\\Endpoints",
+    "\\HTML"
+  ],
+  "SelectedNode": "\\Backend\\Endpoints\\resetPassword.php",
+  "PreviewInSolutionExplorer": false
+}

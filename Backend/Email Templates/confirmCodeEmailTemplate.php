@@ -1,7 +1,7 @@
 <?php
 include 'emailTemplate.php';
 
-function getEmail($confirmCode)
+function getEmail($confirmCode, $email)
 {
     $email =
 '
@@ -14,7 +14,7 @@ function getEmail($confirmCode)
         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
             <tbody>
             <tr>
-                <td> <a href="" target="_blank">Confirm Account</a> </td>
+                <td> <a href="https://jorde.dev/ContactDeluxe/confirmCode.php?Email=' . $email . '&Code=' . $confirmCode . '" target="_blank">Confirm Account</a> </td>
             </tr>
             </tbody>
         </table>

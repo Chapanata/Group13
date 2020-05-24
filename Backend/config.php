@@ -10,8 +10,6 @@ global $database_host;
 global $database_user;
 global $database_pass;
 global $database_name;
-global $table_users;
-global $table_contacts;
 
 $database_host = $ini['database_host'];
 $database_user = $ini['database_user'];
