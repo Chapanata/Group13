@@ -73,6 +73,6 @@ $updateUser->execute();
 // Close connection
 $conn = null;
 
-success($result['UserID']);
+success(TRUE);
 
 ?>
