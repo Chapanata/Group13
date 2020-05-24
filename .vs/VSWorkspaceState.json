@@ -6,6 +6,6 @@
     "\\Backend\\Endpoints",
     "\\HTML"
   ],
-  "SelectedNode": "\\Backend\\Endpoints\\resetPassword.php",
+  "SelectedNode": "\\Backend\\Endpoints\\forgotPassword.php",
   "PreviewInSolutionExplorer": false
 }

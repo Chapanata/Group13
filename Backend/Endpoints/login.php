@@ -39,7 +39,7 @@ $conn = dbConnection();
 $UsersTbl = $GLOBALS['table_users'];
 
 // Check if user exists
-$result = $conn->prepare("SELECT UserID, Confirmed FROM $UsersTbl WHERE Email='$Email' AND Password='$Password'");
+$result = $conn->prepare("SELECT UserID, Name, Confirmed FROM $UsersTbl WHERE Email='$Email' AND Password='$Password'");
 $result->execute();
 $amount = $result->rowCount();
 
@@ -61,6 +61,6 @@ if($result['Confirmed'] != 1)
 // Close connection
 $conn = null;
 
-success($result['UserID']);
+user($result['UserID'], $result['Name']);
 
 ?>
