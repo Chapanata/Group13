@@ -22,7 +22,7 @@ $json = file_get_contents('php://input');
 $data = json_decode($json);
 
 // Confirm required data
-if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
+if(isset($data->SessionToken) == FALSE)
 {
     // do something
     error("Missing Parameters");
@@ -30,44 +30,40 @@ if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
 }
 
 // Get data
+$SessionToken = $data->SessionToken;
+
+// Optional data
+$FirstName = $data->FirstName;
+$LastName = $data->LastName;
+$PhoneNumber = $data->PhoneNumber;
 $Email = $data->Email;
-// Hash password
-$Password = md5($data->Password);
 
 // Create connection
 $conn = dbConnection();
 $UsersTbl = $GLOBALS['table_users'];
+$ContactsTbl = $GLOBALS['table_contacts'];
 
 // Check if user exists
-$result = $conn->prepare("SELECT UserID, Name, Confirmed FROM $UsersTbl WHERE Email='$Email' AND Password='$Password'");
+$result = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$SessionToken'");
 $result->execute();
 $amount = $result->rowCount();
-
-// No user found
 if($amount <= 0)
 {
-    error("User does not exist");
+    error("Token Not Valid");
     closeConnectionAndDie($conn);
 }
 
-// Check confirmed
+// Get UserID
 $result = $result->fetch();
-if($result['Confirmed'] != 1)
-{
-    error("User not confirmed");
-    closeConnectionAndDie($conn);
-}
+$UserID = $result['UserID'];
 
-// Generate Session Token
-$SessionToken = uniqid('', TRUE);
-
-// Update user's session token
-$updateUser = $conn->prepare("UPDATE $UsersTbl SET SessionToken='$SessionToken' WHERE Email='$Email'");
-$updateUser->execute();
+// Insert contact
+$result = $conn->prepare("INSERT INTO $ContactsTbl (OwnerID, FirstName, LastName, PhoneNumber, Email) VALUES ('$UserID', '$FirstName', '$LastName', '$PhoneNumber', '$Email')");
+$result->execute();
 
 // Close connection
 $conn = null;
 
-user($result['UserID'], $result['Name'], $SessionToken);
+success(TRUE);
 
 ?>

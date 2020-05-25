@@ -15,16 +15,16 @@ function error($errorMsg)
     echo(json_encode($error));
 }
 
-function success($success)
+function success($successMsg)
 {
-    $error = array('Success' => $success);
-    echo(json_encode($error));
+    $success = array('Success' => $successMsg);
+    echo(json_encode($success));
 }
 
-function user($userID, $name)
+function user($userID, $name, $sessionToken)
 {
-    $error = array('UserID' => $userID, 'Name' => $name);
-    echo(json_encode($error));
+    $user = array('UserID' => $userID, 'SessionToken' => $sessionToken, 'Name' => $name);
+    echo(json_encode($user));
 }
 
 function closeConnectionAndDie($conn)

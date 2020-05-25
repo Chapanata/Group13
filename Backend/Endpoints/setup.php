@@ -35,6 +35,7 @@ $sql =
 		`ConfirmCode` INT,
 		`Confirmed` BOOLEAN,
 		`Name` VARCHAR(255),
+		`SessionToken` VARCHAR(255),
 		PRIMARY KEY (`UserID`)
 		);";
 if ($conn->query($sql) === FALSE)
@@ -56,13 +57,13 @@ $conn->query($sql);
 // Create Contacts table
 $sql =
     "CREATE TABLE `" . $table_contacts . "` (
-		`UserID` INT NOT NULL AUTO_INCREMENT,
+		`ContactID` INT NOT NULL AUTO_INCREMENT,
 		`OwnerID` INT,
 		`FirstName` VARCHAR(255),
 		`LastName` VARCHAR(255),
 		`PhoneNumber` VARCHAR(12),
 		`Email` VARCHAR(255),
-		PRIMARY KEY (`UserID`)
+		PRIMARY KEY (`ContactID`)
 		);";
 if ($conn->query($sql) === FALSE)
 {
