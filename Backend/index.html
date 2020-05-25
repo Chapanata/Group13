@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <script src="jquery-3.5.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="JS/script.js"></script>
         <title>Contact Manager Deluxe&#8482</title>
         <link rel="stylesheet" type="text/css" href="CSS/normalize.css">
@@ -10,15 +10,17 @@
         <link rel="stylesheet" type="text/css" href="CSS/style.css">
     <body>
         <div class="login-background">
-        <!-- Login -->
+        
             <div class="button-select">
-                <div id="button-color"></div>
-                <button type="button" class="toggle-log" onclick="login()">Login</button>
-                <button type="button" class="toggle-reg" onclick="register()">Register</button>
+                <div class="button-color"></div>
+                <button id="login-butt" type="button" class="toggle-log">Login</button>
+                <button id="register-butt" type="button" class="toggle-reg">Register</button>
             </div>
                 <div class="login-box"> <!-- Our Front -->
                     <img src="CSS/Logo.png" class="logo">
-
+                    
+                    <!-- Login -->
+                    
                     <form id="login" class="input-group">
                         <div class="input-box">
                             <input type="text" name="username" placeholder="Username" required>
@@ -29,47 +31,25 @@
 
                         </div>
                         <input type="button" name="" value="Sign In">
+                        <br/>
+                        <a class="forgot" href="#">Forgot Password?</a>
                     </form>
                     
                     <!-- Register -->
                     
-                    <form id="register" class="register-group">
+                    <form id="register" class="input-group">
                         <div class="register-box">
-                            <input type="text" name="username" placeholder="Username" required>
                             <input type="email" name="username" placeholder="E-mail Address" required>
                             <input type="password" name="password" placeholder="Password" required>
-                            <input type="button" name="" value="Register">
+                            <input type="password" name="password" placeholder="Confirm Password" required>
+                            
                         </div>
+                            <input type="button" name="" value="Register">
                     </form>
                     
-                    <a class="forgot" href="#">Forgot Password?</a>
+                    
                 </div>
-
-            <script>
-
-            var x = document.getElementById("login");
-            var y = document.getElementById("register");
-            var z = document.getElementById("button-color");
-            
-            function register() {
-                x.style.left = "-400px";
-                y.style.left= "50px";
-                z.style.left="200px";
-				x.style.display = "none";
-				y.style.display = "inline-block";
-            }    
-            
-            function login() {
-                x.style.left = "-400px";
-                y.style.left= "50px";
-                z.style.left="0";
-				y.style.display = "none";
-				x.style.display = "inline-block";
-            }
-                
-            </script>
-
-    </div>        
+        </div>    
     </body>
     </head>
 </html>
