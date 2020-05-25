@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Oswald', sans-serif;
+}
+
+html {   
+    font-weight: 300;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+}
+
+.background {
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(boardwalk.jpg_large);
+    height: 100vh;
+}
+
+.box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 90%;
+    background: rgb(247, 247, 247);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.92);
+}
+
+.menu-bar {
+    background: rgb(119, 119, 119);
+    text-align: center;
+    color: #ffffff;
+    transform: translate(0, -23%);
+
+}
+
+.menu-bar ul {
+    list-style-type: none;
+    display: inline-flex;
+}
+
+.menu-bar li {
+    width: 10em;
+    transform: translate(-10%, 0);
+    font-size: 2vw;
+}
+
+.menu-bar button {
+    background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.menu-bar li:hover {
+    background-color: #505050;
+    border-radius: 10px;
+}
+
+
+.search-box input[type="text"]{
+    text-align: center;
+    height: 200px;
+}
