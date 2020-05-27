@@ -82,7 +82,7 @@ html {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
-    height: 700px;
+    height: 800px;
     padding: 65px;
     background: rgb(247, 247, 247);
     box-sizing: border-box;
@@ -90,7 +90,7 @@ html {
 }
 
 
-.login-box input[type="button"] {
+.login-box input[type="submit"] {
     width: 200px;
     margin-bottom: 20px;
     height: 40px;
