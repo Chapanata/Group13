@@ -169,4 +169,53 @@ html {
     margin-top: 50px;
 }
 
+ .message-box input{
+    float: right;
+  background: rgba(19, 35, 47, 0.9);
+  padding: 40px;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    margin-right: 400px;
+}
 
+#message {
+  display:none;
+  color: #000;
+  position: relative;
+margin:0;
+    line-height: 1px;
+}
+
+#message p {
+  padding: 0px 15px;
+  font-size: 15px;
+}
+
+#confirmpassword {
+  display:none;
+  color: red;
+  position: center;
+  margin:0;
+}
+
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -15px;
+  content: "✔";
+}
+
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -15px;
+  content: "✖";
+}
