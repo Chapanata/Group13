@@ -90,7 +90,7 @@ html {
 }
 
 
-.login-box input[type="submit"] {
+.login-box input[type="button"] {
     width: 200px;
     margin-bottom: 20px;
     height: 40px;
@@ -143,6 +143,9 @@ html {
     padding-left: 5px;
 }
 
+.input-group {
+    margin-top: 34px;
+}
 
 
 .register-box input[type="text"], input[type="email"], input[type="password"] {
