@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="JS/script.js"></script>
+        <script src="JS/homepage.js"></script>
         <title>Contact Manager Deluxe&#8482 Main Page</title>
         <link rel="stylesheet" type="text/css" href="CSS/normalize.css">
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&display=swap" rel="stylesheet">
@@ -13,27 +13,102 @@
             <div class="box">
                 <div class="menu-bar">
                     <ul>
-                    <li><button type="button">Search</button></li>
-                    <li><button type="button">Add Contacts</button></li>
-                    <li><button type="button">My Account</button></li>
+                    <li><button id="search-button" type="button">Search</button></li>
+                    <li><button id="add-button" type="button">Add Contacts</button></li>
+                    <li><button id="account-button" type="button">My Account</button></li>
                     <li><button type="button">Log Out</button></li>
                     </ul>
                 </div>
                 
+                <!-- Home Page -->
+<!--
+                <h1>Welcome to the Contact Manager Deluxe Home Page</h1>
+-->
+                
+                
                 <!-- Search Form -->
-                <h1>Contact Manager Deluxe</h1>
-                <div class="search-box">
+                <div id="search-box">
+                <h1>Search for Contacts</h1>
                 <input type="text" placeholder="Search Contact..">
+                <button class="lookup" type="button">Search User</button>
+                <br><br>
+                <div class="seperator">
+                <table>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>E-Mail Address</th>
+                        <th>Edit</th>
+                    </tr>
+                    <tr>
+                        <td>Test</td>
+                        <td>One</td>
+                        <td>Fake Number</td>
+                        <td>Fake Address</td>
+                        <td>Fake E-Mail</td>
+                        <td><button type="button">Edit</button></td>
+                    </tr>
+                    <tr>
+                        <td>Test</td>
+                        <td>Two</td>
+                        <td>Fake Number</td>
+                        <td>Fake Address</td>
+                        <td>Fake E-Mail</td>
+                        <td><button type="button">Edit</button></td>
+                    </tr>
+                </table>
+                </div>
                 </div>
                 
                 <!-- Add Contacts -->
-                
+                <div id="add-contacts">
+                <h1>Add New Contact</h1>
+                    <div class="contact-fields">
+                        <input type="text" name="first-name" placeholder="First Name" required>
+                        <br>
+                        <input type="text" name="last-name" placeholder="Last Name" required>
+                        <br>
+                        <input type="tel" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        placeholder="Phone Number" required>
+                        <br>
+                        <input type="text" name="address" placeholder="Address" required>
+                        <br>
+                        <input type="email" name="email" placeholder="E-Mail Address" required>
+                        <br>
+                        <button type="button" >Submit</button>
+                    </div>
+                </div>
                 
                 
                 <!-- My Account -->
-                
-                
-                
+                <div id="my-account">
+                    <h1>My Account</h1>
+                    <h2>Click The Corresponding Buttons to Change your E-Mail or Password</h2>
+                    <div class="change-fields">
+                        <button type="button" class="email">E-Mail</button>
+                        <button type="button" class="password">Password</button>
+                    </div>
+                    
+                    <div id="mailbox">
+                    <h2>Change E-Mail Address</h2>
+                    <input type="email" name="email" placeholder="Enter New E-Mail Address" required>
+                    <br>
+                    <input type="email" name="email" placeholder="Confirm E-Mail Address" required>
+                    <br>
+                    <button type="button" >Submit</button>
+                    </div>
+
+                    <div id="newpass">
+                    <h2>Change Password</h2>
+                    <input type="password" name="password" placeholder="Enter New Password" required>
+                    <br>
+                    <input type="password" name="password" placeholder="Confirm Password" required>
+                    <br>
+                    <button type="button" >Submit</button>
+                    </div>
+                </div>
                 <!-- Log Out-->
                 
             </div>
