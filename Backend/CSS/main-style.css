@@ -64,7 +64,144 @@ html {
 }
 
 
-.search-box input[type="text"]{
+#search-box input[type="text"]{
     text-align: center;
-    height: 200px;
+    height: 30px;
+    width: 30%;
+    
+}
+
+#search-box h1 {
+    margin-left: 8%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  padding: 20px;
+  font-size: 25px;        
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+#add-contacts h1{
+    margin-left: 42%;
+}
+
+.contact-fields input {
+    padding: 0 20px 20px;
+    font-size: 36px;
+    width: 300px;
+    height: 30px;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    border-radius: 8px;
+    text-align: center;
+    margin-left: 40%;
+}
+
+.contact-fields button {
+    width: 200px;
+    margin-bottom: 20px;
+    height: 40px;
+    padding: 10px;
+    align-items: flex-start;
+    text-align: center;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-radius: 199px;
+    cursor: pointer;
+    margin-left: 44%;
+}
+
+#my-account h1,h2{
+    margin-top: 0%;
+    text-align: center;
+}
+
+#my-account .email, .password{
+    width: 200px;
+    height: 40px;
+    align-items: flex-start;
+    text-align: center;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-radius: 199px;
+    cursor: pointer;
+    display: inline;
+}
+
+.change-fields {
+    text-align: center;
+}
+
+#mailbox{
+    position: absolute;    
+    width: 30%;
+    height: 55%;
+    padding: 25px;
+    background: rgb(165, 165, 165);
+    box-sizing: border-box;
+    text-align: center;
+    margin-left: 35%;
+    margin-top: 2%;
+}
+
+#mailbox h2 {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#mailbox input {
+    padding: 10px 10px 10px;
+    font-size: 28px;
+    width: 60%;
+    height: 5%;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#newpass{
+    position: absolute;    
+    width: 30%;
+    height: 55%;
+    padding: 25px;
+    background: rgb(165, 165, 165);
+    box-sizing: border-box;
+    text-align: center;
+    margin-left: 35%;
+    margin-top: 2%;
+}
+
+#newpass h2 {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#newpass input {
+    padding: 10px 10px 10px;
+    font-size: 28px;
+    width: 60%;
+    height: 5%;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 50px;
 }
