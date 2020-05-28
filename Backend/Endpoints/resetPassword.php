@@ -1,14 +1,14 @@
 <?php
-include 'connection.php';
+include '../connection.php';
 include 'confirmCodeEmailTemplate.php';
 
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'phpMailer/Exception.php';
-require 'phpMailer/PHPMailer.php';
-require 'phpMailer/SMTP.php';
+require '../phpMailer/Exception.php';
+require '../phpMailer/PHPMailer.php';
+require '../phpMailer/SMTP.php';
 
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
