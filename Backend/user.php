@@ -1,9 +1,12 @@
 <?php
-
 include 'session.php';
-# To Do
-// Point to "pages" folder
-// Include header
-// Include page based on get parameter
-// Include footer
+
+// Ensure that user is logged in
+if (!isset($uid))
+{
+	echo '<script type="text/javascript">';
+	echo 'window.location.href = "index.php"';
+	echo '</script>';
+}
+
 ?>

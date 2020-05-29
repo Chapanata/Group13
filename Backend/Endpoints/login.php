@@ -1,14 +1,5 @@
 <?php
-include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
+include '../session.php';
 
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
@@ -18,6 +9,7 @@ Created by Samuel Arminana (armi.sam99@gmail.com)
 header('Content-Type: application/json');
 
 // Read raw data from the request
+
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
@@ -25,7 +17,7 @@ $data = json_decode($json);
 if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
 {
     // do something
-    error("Missing Parameters");
+	error("Missing Parameters");
     die();
 }
 
@@ -68,6 +60,12 @@ $updateUser->execute();
 // Close connection
 $conn = null;
 
+// Return Back
+$_SESSION['current_uid'] = $result['UserID'];
+$_SESSION['current_name'] = $result['Name'];
+$_SESSION['current_email'] = $Email;
+
 user($result['UserID'], $result['Name'], $SessionToken);
+
 
 ?>

@@ -7,14 +7,15 @@
         <title>Contact Manager Deluxe&#8482 Main Page</title>
         <link rel="stylesheet" type="text/css" href="CSS/normalize.css">
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="CSS/main-style.css">
     <body>
         <div class="background">
             <div class="box">
                 <div class="menu-bar">
                     <ul>
-                    <li><button id="search-button" type="button">Search</button></li>
-                    <li><button id="add-button" type="button">Add Contacts</button></li>
+					Hi, {name}
+                    <li><button id="search-button" type="button">My Contacts</button></li>
                     <li><button id="account-button" type="button">My Account</button></li>
                     <li><button type="button">Log Out</button></li>
                     </ul>
@@ -29,8 +30,11 @@
                 <!-- Search Form -->
                 <div id="search-box">
                 <h1>Search for Contacts</h1>
+				<button class="add_new_user" type="button"><i class="material-icons">add</i> New Contact</button>
+					<br>
                 <input type="text" placeholder="Search Contact..">
                 <button class="lookup" type="button">Search User</button>
+
                 <br><br>
                 <div class="seperator">
                 <table>
