@@ -222,3 +222,11 @@ margin:0;
   left: -15px;
   content: "✖";
 }
+/* Material Icons Default */
+i.material-icons {
+	vertical-align: middle;
+	position: relative;
+	top: -1px;
+	margin-left: 5px;
+	cursor: default;
+}

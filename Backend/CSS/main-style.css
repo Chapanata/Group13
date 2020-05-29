@@ -18,44 +18,55 @@ html {
     height: 100vh;
 }
 
-.box{
+.main-form {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
     height: 90%;
+
+}
+
+.box{
     background: rgb(247, 247, 247);
     box-sizing: border-box;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.92);
+    height: inherit;
+    padding: 10px;
 }
 
 .menu-bar {
     background: rgb(119, 119, 119);
     text-align: center;
     color: #ffffff;
-    transform: translate(0, -23%);
-
+    display: flex;
 }
 
 .menu-bar ul {
+    padding: 0;
+    margin: 0;
+    position: relative;
     list-style-type: none;
     display: inline-flex;
+    width: 100%;
 }
 
 .menu-bar li {
-    width: 10em;
-    transform: translate(-10%, 0);
+    width: 100%;
+    align-content: stretch;
     font-size: 2vw;
 }
 
 .menu-bar button {
     background: none;
-	color: inherit;
-	border: none;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+    color: inherit;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    padding: 20px;
+    width: 100%;
 }
 
 .menu-bar li:hover {
@@ -63,36 +74,42 @@ html {
     border-radius: 10px;
 }
 
+#search {
+    width: 100%;
+    display: block;
+    justify-content: center;
+    text-align: center;
+    height: auto;
 
-#search-box input[type="text"]{
+}
+
+#search input[type="text"]{
     text-align: center;
     height: 30px;
     width: 30%;
-    
+
 }
 
-#search-box h1 {
-    margin-left: 8%;
-}
-
-table {
+#search table {
     border-collapse: collapse;
     width: 100%;
+    display: table;
+    height: 100%;
 }
 
 td, th {
-  border: 1px solid #dddddd;
-  padding: 20px;
-  font-size: 25px;        
-  text-align: center;
+    border: 1px solid #dddddd;
+    padding: 20px;
+    font-size: 25px;
+    text-align: center;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+    background-color: #dddddd;
 }
 
-#add-contacts h1{
-    margin-left: 42%;
+#add-contacts{
+    text-align: center;
 }
 
 .contact-fields input {
@@ -101,12 +118,9 @@ tr:nth-child(even) {
     width: 300px;
     height: 30px;
     margin-bottom: 15px;
-    border: none;
-    border-bottom: 2px solid #000;
     outline: none;
     border-radius: 8px;
     text-align: center;
-    margin-left: 40%;
 }
 
 .contact-fields button {
@@ -120,7 +134,6 @@ tr:nth-child(even) {
     border-width: 2px;
     border-radius: 199px;
     cursor: pointer;
-    margin-left: 44%;
 }
 
 #my-account h1,h2{
@@ -204,4 +217,51 @@ tr:nth-child(even) {
     border-radius: 8px;
     text-align: center;
     margin-bottom: 50px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: fit-content;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Material Icons Default */
+i.material-icons {
+	vertical-align: middle;
+	position: relative;
+	top: -1px;
+	margin-left: 5px;
+	cursor: default;
 }
