@@ -38,7 +38,7 @@ $amount = $result->rowCount();
 // No user found
 if($amount <= 0)
 {
-    error("User does not exist");
+    error("Incorrect email or password.");
     closeConnectionAndDie($conn);
 }
 
