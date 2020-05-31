@@ -16,14 +16,11 @@ body {
 }
 
 .button-select {
+    margin-left: auto;
+    margin-right: auto;
     z-index: 2;
     width: 390px;
     height: 43px;
-    transform: translate(-50%, -50%);
-    top: 43%;
-    left: 50%;
-    bottom: 50%;
-    right: 50%;
     position: relative;
     box-shadow: 0 0 20px 9px #8d938f;  
     border-radius: 30px;
@@ -42,27 +39,26 @@ body {
 }
 
 .toggle-log {
+    left: 0px;
     font-size: 22px;
-    padding: 10px 30px;
+    padding: 10px;
     cursor: pointer;
     background: transparent;
     border: 0;
     outline: none;
-    position: relative;
-    left: 13%;
-    bottom: 5%;  
+    position: absolute;
+    width: 50%;
 }
 
 .toggle-reg {
     font-size: 22px;
-    padding: 10px 30px;
+    padding: 10px;
     cursor: pointer;
     background: transparent;
     border: 0;
     outline: none;
-    position: relative;
-    left: 30%;
-    bottom: 5%;  
+    width: 50%;
+    position: absolute;
 }
 
 html {   
@@ -72,11 +68,14 @@ html {
 }
 
 .login-box img{
+    left: 50%;
     height: 150px;
-    padding: 0 0 140px 157px;
+    padding: 0 0 80px 0;
 }
 
 .login-box{
+    overflow: hidden;
+    text-align: center;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -90,7 +89,7 @@ html {
 }
 
 
-.login-box .submit-btn{
+.login-box input[type="submit"]{
     width: 200px;
     margin-bottom: 20px;
     height: 40px;
@@ -172,61 +171,53 @@ html {
     margin-top: 50px;
 }
 
- .message-box input{
+.message-box input{
     float: right;
-  background: rgba(19, 35, 47, 0.9);
-  padding: 40px;
-  max-width: 600px;
-  margin: 40px auto;
-  border-radius: 4px;
-  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    background: rgba(19, 35, 47, 0.9);
+    padding: 40px;
+    max-width: 600px;
+    margin: 40px auto;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
     margin-right: 400px;
 }
 
 #message {
-  display:none;
-  color: #000;
-  position: relative;
-margin:0;
+    display:none;
+    color: #000;
+    position: relative;
+    margin:0;
     line-height: 1px;
 }
 
 #message p {
-  padding: 0px 15px;
-  font-size: 15px;
+    padding: 0px 15px;
+    font-size: 15px;
 }
 
 #confirmpassword {
-  display:none;
-  color: red;
-  position: center;
-  margin:0;
+    display:none;
+    color: red;
+    position: center;
+    margin:0;
 }
 
 .valid {
-  color: green;
+    color: green;
 }
 
 .valid:before {
-  position: relative;
-  left: -15px;
-  content: "✔";
+    position: relative;
+    left: -15px;
+    content: "✔";
 }
 
 .invalid {
-  color: red;
+    color: red;
 }
 
 .invalid:before {
-  position: relative;
-  left: -15px;
-  content: "✖";
-}
-/* Material Icons Default */
-i.material-icons {
-	vertical-align: middle;
-	position: relative;
-	top: -1px;
-	margin-left: 5px;
-	cursor: default;
+    position: relative;
+    left: -15px;
+    content: "✖";
 }

@@ -64,10 +64,11 @@ if(isset($_SESSION['current_uid']))
 		<p id="length" class="invalid">Minimum <b>8 characters</b></p>
 		<p id="letter" class="invalid">A <b>lowercase</b> letter</p>
 		<p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-	</div>
-	<div id="confirmpassword">
+		<div id="confirmpassword">
 	<h5>Passwords do not match. Please reconfirm password.</h5>
 	</div>
+	</div>
+
 </form>
 
 

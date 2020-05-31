@@ -1,7 +1,21 @@
 $(document).ready(function() {
 
     var modal = document.getElementById("add-contacts");
-
+	$.fn.serializeObject = function() {
+		var o = {};
+		var a = this.serializeArray();
+		$.each(a, function() {
+		if (o[this.name] !== undefined) {
+		if (!o[this.name].push) {
+		o[this.name] = [o[this.name]];
+		}
+		o[this.name].push(this.value || '');
+		} else {
+		o[this.name] = this.value || '';
+		}
+		});
+		return o;
+		};
     $("#search").show();
     $(".seperator").hide();
     $("#add-contacts").hide();
@@ -62,9 +76,9 @@ function resetForm(){
     $("#add-contacts").hide();
 }
 
-function addRow(firstname, lastname, phone, address, email)
+function addRow(contactid,firstname, lastname, phone, address, email)
 {
-    var row = '<tr><td>' + firstname + '</td><td>' + lastname + '</td><td>'+ phone + '</td><td>' + address + '</td><td>' + email + '</td><td><button type="button" onclick="showEdit(this.parentNode.parentNode)">Edit</button></td></tr>';
+    var row = '<tr data-contactid="'+contactid+'"><td>' + firstname + '</td><td>' + lastname + '</td><td>'+ phone + '</td><td>' + address + '</td><td>' + email + '</td><td><button type="button" onclick="showEdit(this.parentNode.parentNode)">Edit</button></td></tr>';
 
     $("table").find('tbody').append(row);
 }
@@ -87,9 +101,30 @@ function showAdd()
         var phone = $('#phone').val();
         var address = $('#address').val();
         var email = $('#email').val();
+		var contact_identity = "";
+		$.ajax({
+			url: '/ContactDeluxe/Endpoints/createContact.php',
+			type : "POST",
+			dataType : 'json', // data type
+			data: JSON.stringify($('#contactmodal').serializeObject()),
+			contentType: 'application/json;charset=UTF-8',
+			success : function(result) {
+				//console.log(result);
 
-        addRow(first, last, phone, address, email);
-        resetForm();
+				contact_identity = result.ReturnedID;
+				addRow(contact_identity,first, last, phone, address, email);
+
+				resetForm();
+
+			},
+			error: function(xhr, resp, text) {
+
+			}
+		});
+
+
+
+
     });
 }
 
@@ -106,18 +141,40 @@ function showEdit(curRow)
     var phone = curRow.cells[2].innerHTML;
     var address = curRow.cells[3].innerHTML;
     var email = curRow.cells[4].innerHTML;
+	var contactid = curRow.getAttribute('data-contactid');
 
     $('#first').val(firstname);
     $('#last').val(lastname);
     $('#phone').val(phone);
     $('#address').val(address);
     $('#email').val(email);
-
+	$('#contactid').val(contactid);
     //Delete button
     $("#delete-contact-btn").unbind();
     $("#delete-contact-btn").click(function(){
-        $( curRow ).remove();
-        resetForm();
+		$("#task").val("2"); // 0 = Add, 1 = Edit, 2 = Delete
+
+			$.ajax({
+			url: '/ContactDeluxe/Endpoints/editContact.php',
+			type : "POST",
+			dataType : 'json', // data type
+			data: JSON.stringify($('#contactmodal').serializeObject()),
+			contentType: 'application/json;charset=UTF-8',
+			success : function(result) {
+				//console.log(result);
+
+
+			$( curRow ).remove();
+        	resetForm();
+
+			},
+			error: function(xhr, resp, text) {
+
+			}
+		});
+
+
+
     });
 
     //Confirm edit button
@@ -129,13 +186,30 @@ function showEdit(curRow)
         var phone = $('#phone').val();
         var address = $('#address').val();
         var email = $('#email').val();
+		$("#task").val("1"); // 0 = Add, 1 = Edit, 2 = Delete
+		$.ajax({
+			url: '/ContactDeluxe/Endpoints/editContact.php',
+			type : "POST",
+			dataType : 'json', // data type
+			data: JSON.stringify($('#contactmodal').serializeObject()),
+			contentType: 'application/json;charset=UTF-8',
+			success : function(result) {
+				//console.log(result);
 
-        curRow.cells[0].innerHTML = first;
-        curRow.cells[1].innerHTML = last;
-        curRow.cells[2].innerHTML = phone;
-        curRow.cells[3].innerHTML = address;
-        curRow.cells[4].innerHTML = email;
 
-        resetForm();
+				 curRow.cells[0].innerHTML = first;
+					curRow.cells[1].innerHTML = last;
+					curRow.cells[2].innerHTML = phone;
+					curRow.cells[3].innerHTML = address;
+					curRow.cells[4].innerHTML = email;
+
+					resetForm();
+
+			},
+			error: function(xhr, resp, text) {
+
+			}
+		});
+
     });
 }
