@@ -27,14 +27,29 @@ $ContactID = $data->ContactID;
 $conn = dbConnection();
 $ContactsTbl = $GLOBALS['table_contacts'];
 
+$currentUser = "";
+// Running through api
+if (isset($data->SessionToken))
+{
+	$sToken = $data->SessionToken;
+	$getuid = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$sToken'");
+	$getuid->execute();
+	$getuid = $getuid->fetch();
+	$uid = $getuid['UserID'];
+}
+else
+{
+	$currentUser = $uid;
+}
+
 if ($Task == 1)
 {
-	$result = $conn->prepare("UPDATE $ContactsTbl SET FirstName='$FirstName',LastName='$LastName', PhoneNumber='$PhoneNumber', Email='$Email',Address='$Address',LastUpdated='$today_date' WHERE ContactID='$ContactID' and OwnerID='$uid'");
+	$result = $conn->prepare("UPDATE $ContactsTbl SET FirstName='$FirstName',LastName='$LastName', PhoneNumber='$PhoneNumber', Email='$Email',Address='$Address',LastUpdated='$today_date' WHERE ContactID='$ContactID' and OwnerID='$currentUser'");
 	$result->execute();
 }
 else if ($Task == 2)
 {
-	$result = $conn->prepare("DELETE FROM $ContactsTbl WHERE UserID='$uid' AND ContactID='$ContactID';");
+	$result = $conn->prepare("DELETE FROM $ContactsTbl WHERE UserID='$currentUser' AND ContactID='$ContactID';");
 	$result->execute();
 }
 

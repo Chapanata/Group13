@@ -26,9 +26,22 @@ $conn = dbConnection();
 $UsersTbl = $GLOBALS['table_users'];
 $ContactsTbl = $GLOBALS['table_contacts'];
 
+$currentUser = "";
+// Running through api
+if (isset($data->SessionToken))
+{
+	$sToken = $data->SessionToken;
+	$getuid = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$sToken'");
+	$getuid->execute();
+	$getuid = $getuid->fetch();
+	$uid = $getuid['UserID'];
+}
+else
+{
+	$currentUser = $uid;
+}
 // Insert contact
-
-$result = $conn->prepare("INSERT INTO $ContactsTbl VALUES ('$uid',DEFAULT, '$FirstName', '$LastName', '$PhoneNumber', '$Email','$Address','$today_date','$today_date')");
+$result = $conn->prepare("INSERT INTO $ContactsTbl VALUES ('$currentUser',DEFAULT, '$FirstName', '$LastName', '$PhoneNumber', '$Email','$Address','$today_date','$today_date')");
 $result->execute();
 
 $result = null;

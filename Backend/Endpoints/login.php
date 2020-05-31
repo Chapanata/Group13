@@ -65,6 +65,7 @@ $_SESSION['current_uid'] = $result['UserID'];
 $_SESSION['current_name'] = $result['Name'];
 $_SESSION['current_email'] = $Email;
 
+
 user($result['UserID'], $result['Name'], $SessionToken);
 
 
