@@ -1,7 +1,7 @@
 <?php
 include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
+include '../Email Templates/confirmCodeEmailTemplate.php';
+include '../../sendmail.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -29,15 +29,9 @@ if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
     die();
 }
 
-// Confirm valid email
-if(filter_var($data->Email, FILTER_VALIDATE_EMAIL) == FALSE)
-{
-    error("Email is not valid");
-    die();
-}
-
 // Get data
 $Email = $data->Email;
+$Fullname = $data->Name;
 // Hash password
 $Password = md5($data->Password);
 
@@ -60,7 +54,7 @@ if($amount > 0)
 $confirmCode = rand(1000,9999);
 
 // Send email
-$mail = new PHPMailer;
+//$mail = new PHPMailer;
 
 // Don't use SMTP, just use mail function
 //$mail->SMTPDebug = 3;
@@ -72,23 +66,37 @@ $mail = new PHPMailer;
 //$mail->Password = $app_pass;
 //$mail->Port = 587;
 
-$mail->setFrom($app_email, "Contact Manager Deluxe");
-$mail->addAddress($Email);
-$mail->isHTML(true);
+//$mail->setFrom("info@contactdeluxe.com", "Contact Manager Deluxe");
+//$mail->addAddress($Email);
+//$mail->isHTML(true);
+//$mail->Subject = "Your Registration to Contact Manager Deluxe";
+//$mail->Body = getEmail($confirmCode, $Email);
+//$mail->AltBody = "Your confirmation code is " . $confirmCode;
+/*
+if(!$mail->send())
+{
+    error("Couldn't send email ");
+    closeConnectionAndDie($conn);
+}
+*/
+// Add user entry
+
+$mail = new NewMail();
 $mail->Subject = "Your Registration to Contact Manager Deluxe";
-$mail->Body = getEmail($confirmCode, $Email);
+$mail->Email = $Email;
+$mail->Name = $Fullname;
+$mail->Body = getEmail($confirmCode, $Email,$Fullname);
 $mail->AltBody = "Your confirmation code is " . $confirmCode;
 
 if(!$mail->send())
 {
-    error("Internal Error " . $app_pass . $app_email . $conn->error);
+    error("Couldn't send email");
     closeConnectionAndDie($conn);
 }
 
-// Add user entry
 $result = null;
 
-$updateUser = $conn->prepare("INSERT INTO $UsersTbl (UserID, Email, Password, ConfirmCode) VALUES (DEFAULT, '$Email', '$Password', '$confirmCode')");
+$updateUser = $conn->prepare("INSERT INTO $UsersTbl (UserID, Email, Password, ConfirmCode, Name) VALUES (DEFAULT, '$Email', '$Password', '$confirmCode', '$Fullname')");
 $updateUser->execute();
 
 // Close connection

@@ -1,14 +1,5 @@
 <?php
 include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
 
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
@@ -26,13 +17,6 @@ if(isset($Email) == FALSE || isset($Code) == FALSE)
 {
     // do something
     error("Missing Parameters");
-    die();
-}
-
-// Confirm valid email
-if(filter_var($Email, FILTER_VALIDATE_EMAIL) == FALSE)
-{
-    error("Email is not valid");
     die();
 }
 

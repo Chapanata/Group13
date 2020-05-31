@@ -1,11 +1,11 @@
 <?php
 include 'emailTemplate.php';
 
-function getEmail($confirmCode, $email)
+function getEmail($confirmCode, $email, $name)
 {
-    $email =
+    $mail =
 '
-<p>Hi there,</p>
+<p>Hi '.$name.',</p>
 <p>Thank you for registering with our platform. Here\'s your confirmation code, <b>' . $confirmCode . '</b></p>
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
     <tbody>
@@ -14,7 +14,7 @@ function getEmail($confirmCode, $email)
         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
             <tbody>
             <tr>
-                <td> <a href="https://jorde.dev/ContactDeluxe/confirmCode.php?Email=' . $email . '&Code=' . $confirmCode . '" target="_blank">Confirm Account</a> </td>
+                <td> <a href="https://jorde.dev/ContactDeluxe/Endpoints/confirmCode.php?&Email=' . $email . '&Code=' . $confirmCode . '" target="_blank">Confirm Account</a> </td>
             </tr>
             </tbody>
         </table>
@@ -24,7 +24,7 @@ function getEmail($confirmCode, $email)
 </table>
 <p>Have fun managing your contacts!</p>
 ';
-    return buildBase($email);
+    return buildBase($mail);
 }
 
 ?>

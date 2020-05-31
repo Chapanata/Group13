@@ -29,7 +29,7 @@ function user($userID, $name, $sessionToken)
 
 function closeConnectionAndDie($conn)
 {
-    $conn->close();
+    $conn = null;
     die();
 }
 

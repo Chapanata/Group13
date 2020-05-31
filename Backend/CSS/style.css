@@ -90,7 +90,7 @@ html {
 }
 
 
-.login-box input[type="submit"]{
+.login-box .submit-btn{
     width: 200px;
     margin-bottom: 20px;
     height: 40px;

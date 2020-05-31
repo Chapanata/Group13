@@ -14,9 +14,17 @@ global $email;
 
 if (isset($_SESSION['current_uid']))
 {
+
 	$uid = $_SESSION['current_uid'];
-	$email = $_SESSION['current_email'];
-	$name = $_SESSION['current_name'];
+
+	$CONN = dbConnection();
+	$getUsr = $CONN->prepare("SELECT * FROM users where UserID=?");
+	$getUsr->bindValue(1, $uid, PDO::PARAM_STR);
+	$getUsr->execute();
+	$usrRows = $getUsr->fetch(PDO::FETCH_ASSOC);
+
+	$email = $usrRows['Email'];
+	$name = $usrRows['Name'];
 }
 
 ?>
