@@ -9,202 +9,195 @@ if(isset($_SESSION['current_uid']))
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="JS/script.js"></script>
-<title>Contact Manager Deluxe&#8482</title>
-<link rel="stylesheet" type="text/css" href="CSS/normalize.css">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="CSS/style.css">
-<body>
-<div class="login-background">
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="JS/script.js"></script>
+        <title>Contact Manager Deluxe&#8482</title>
+        <link rel="stylesheet" type="text/css" href="CSS/normalize.css">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="CSS/style.css">
+        <body>
+            <div class="login-background">
 
-<div class="button-select">
-<div class="button-color"></div>
-<button id="login-butt" type="button" class="toggle-log">Login</button>
-<button id="register-butt" type="button" class="toggle-reg">Register</button>
-</div>
+                <div class="login-box"> <!-- Our Front -->
+                    <img src="CSS/Logo.png" class="logo"/>
+                    <div class="button-select">
+                        <div class="button-color"></div>
+                        <button id="login-butt" type="button" class="toggle-log">Login</button>
+                        <button id="register-butt" type="button" class="toggle-reg">Register</button>
+                    </div>
+                    <!-- Login -->
 
-<div class="login-box"> <!-- Our Front -->
-<img src="CSS/Logo.png" class="logo">
+                    <form id="login" action="" method="post" class="input-group">
+                        <div id="rtnlogin" style="text-align:center;color:red;"></div>
+                        <div class="input-box">
+                            <input type="text"  name="Email" placeholder="E-Mail Address" required>
 
-<!-- Login -->
+                        </div>
+                        <div class="input-box">
+                            <input type="password" name="Password" placeholder="Password" required>
 
-<form id="login" action="" method="post" class="input-group">
-<div id="rtnlogin" style="text-align:center;color:red;"></div>
-<div class="input-box">
-<input type="text"  name="Email" placeholder="E-Mail Address" required>
+                        </div>
+                        <input type="button" id="signin" name="SignIn" class="submit-btn" value="Sign In">
+                        <br/>
 
-</div>
-<div class="input-box">
-<input type="password" name="Password" placeholder="Password" required>
+                        <a class="forgot" href="#">Forgot Password?</a>
+                    </form>
 
-</div>
-<input type="button" id="signin" name="SignIn" class="submit-btn" value="Sign In">
-<br/>
+                    <!-- Register -->
 
-<a class="forgot" href="#">Forgot Password?</a>
-</form>
+                    <form id="register" action="" method="post" class="input-group">
+                        <div id="rtnregister" style="text-align:center;color:red;"></div>
+                        <div class="register-box">
+                            <input type="text" name="Name" placeholder="Full Name" required>
+                            <input type="email" name="Email" placeholder="E-mail Address" required>
+                            <input type="password" id="password" name="Password" placeholder="Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one uppercase and lowercase letter, and at least 8 or more characters" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Follow Password Requirements' : ''); if(this.checkValidity()) form.confirm.pattern = this.value;" required>
+                            <input type="password" id="confirm" name="confirm" placeholder="Confirm Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Confirm Password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Passwords do not match' : '');" required>
 
-<!-- Register -->
-
-<form id="register" action="" method="post" class="input-group">
-	<div id="rtnregister" style="text-align:center;color:red;"></div>
-	<div class="register-box">
-		<input type="text" name="Name" placeholder="Full Name" required>
-		<input type="email" name="Email" placeholder="E-mail Address" required>
-		<input type="password" id="password" name="Password" placeholder="Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one uppercase and lowercase letter, and at least 8 or more characters" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Follow Password Requirements' : ''); if(this.checkValidity()) form.confirm.pattern = this.value;" required>
-		<input type="password" id="confirm" name="confirm" placeholder="Confirm Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Confirm Password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Passwords do not match' : '');" required>
-
-	</div>
-<input type="button" id="createuser" class="submit-btn" name="" value="Register">
-	<div id="message">
-		<h6>Password must contain the following:</h6>
-		<p id="length" class="invalid">Minimum <b>8 characters</b></p>
-		<p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-		<p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-		<div id="confirmpassword">
-	<h5>Passwords do not match. Please reconfirm password.</h5>
-	</div>
-	</div>
-
-</form>
-
-
-</div>
-</div>
-<script>
-var passwordInput = document.getElementById("password");
-var confirmInput = document.getElementById("confirm");
-var letter = document.getElementById("letter");
-var capital = document.getElementById("capital");
-var length = document.getElementById("length");
+                        </div>
+                        <input type="button" id="createuser" class="submit-btn" name="" value="Register">
+                        <div id="message">
+                            <h6>Password must contain the following:</h6>
+                            <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                            <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                            <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                            <h5 id="confirmpassword" style="padding: 8px;">Passwords do not match. Please reconfirm password.</h5>
+                        </div>
+                    </form>
+                </div>
+                <script>
+                    var passwordInput = document.getElementById("password");
+                    var confirmInput = document.getElementById("confirm");
+                    var letter = document.getElementById("letter");
+                    var capital = document.getElementById("capital");
+                    var length = document.getElementById("length");
 
 
-passwordInput.onfocus = function() {
-document.getElementById("message").style.display = "block";
-}
+                    passwordInput.onfocus = function() {
+                        document.getElementById("message").style.display = "block";
+                    }
 
 
-confirmInput.onfocus = function() {
+                    confirmInput.onfocus = function() {
 
-if(passwordInput.value != confirmInput.value){
-document.getElementById("confirmpassword").style.display = "block";
-}
+                        if(passwordInput.value != confirmInput.value){
+                            document.getElementById("confirmpassword").style.display = "block";
+                        }
 
-}
+                    }
 
-confirmInput.onkeyup = function(){
+                    confirmInput.onkeyup = function(){
 
-if(passwordInput.value == confirmInput.value){
-document.getElementById("confirmpassword").style.display = "none";
-}
-else
-document.getElementById("confirmpassword").style.display = "block";
-}
+                        if(passwordInput.value == confirmInput.value){
+                            document.getElementById("confirmpassword").style.display = "none";
+                        }
+                        else
+                            document.getElementById("confirmpassword").style.display = "block";
+                    }
 
-passwordInput.onkeyup = function() {
+                    passwordInput.onkeyup = function() {
 
-var lowerCaseLetters = /[a-z]/g;
-if(passwordInput.value.match(lowerCaseLetters)) {
-letter.classList.remove("invalid");
-letter.classList.add("valid");
-} else {
-letter.classList.remove("valid");
-letter.classList.add("invalid");
-}
+                        var lowerCaseLetters = /[a-z]/g;
+                        if(passwordInput.value.match(lowerCaseLetters)) {
+                            letter.classList.remove("invalid");
+                            letter.classList.add("valid");
+                        } else {
+                            letter.classList.remove("valid");
+                            letter.classList.add("invalid");
+                        }
 
-var upperCaseLetters = /[A-Z]/g;
-if(passwordInput.value.match(upperCaseLetters)) {
-capital.classList.remove("invalid");
-capital.classList.add("valid");
-} else {
-capital.classList.remove("valid");
-capital.classList.add("invalid");
-}
+                        var upperCaseLetters = /[A-Z]/g;
+                        if(passwordInput.value.match(upperCaseLetters)) {
+                            capital.classList.remove("invalid");
+                            capital.classList.add("valid");
+                        } else {
+                            capital.classList.remove("valid");
+                            capital.classList.add("invalid");
+                        }
 
-if(passwordInput.value.length >= 8) {
-length.classList.remove("invalid");
-length.classList.add("valid");
-} else {
-length.classList.remove("valid");
-length.classList.add("invalid");
-}
+                        if(passwordInput.value.length >= 8) {
+                            length.classList.remove("invalid");
+                            length.classList.add("valid");
+                        } else {
+                            length.classList.remove("valid");
+                            length.classList.add("invalid");
+                        }
 
-if(passwordInput.value != confirmInput.value){
-document.getElementById("confirmpassword").style.display = "block";
-}
-else
-document.getElementById("confirmpassword").style.display = "none";
-}
+                        if(passwordInput.value != confirmInput.value){
+                            document.getElementById("confirmpassword").style.display = "block";
+                        }
+                        else
+                            document.getElementById("confirmpassword").style.display = "none";
+                    }
 
-</script>
-<script>$(document).ready(function(){
+                </script>
+                <script>$(document).ready(function(){
 
-$.fn.serializeObject = function()
-{
-var o = {};
-var a = this.serializeArray();
-$.each(a, function() {
-if (o[this.name] !== undefined) {
-if (!o[this.name].push) {
-o[this.name] = [o[this.name]];
-}
-o[this.name].push(this.value || '');
-} else {
-o[this.name] = this.value || '';
-}
-});
-return o;
-};
+                        $.fn.serializeObject = function()
+                        {
+                            var o = {};
+                            var a = this.serializeArray();
+                            $.each(a, function() {
+                                if (o[this.name] !== undefined) {
+                                    if (!o[this.name].push) {
+                                        o[this.name] = [o[this.name]];
+                                    }
+                                    o[this.name].push(this.value || '');
+                                } else {
+                                    o[this.name] = this.value || '';
+                                }
+                            });
+                            return o;
+                        };
 
-$("#signin").on('click', function(){
-// send ajax
-$.ajax({
-url: '/ContactDeluxe/Endpoints/login.php',
-type : "POST",
-dataType : 'json', // data type
-data: JSON.stringify($('#login').serializeObject()),
-contentType: 'application/json;charset=UTF-8',
-success : function(result) {
+                        $("#signin").on('click', function(){
+                            // send ajax
+                            $.ajax({
+                                url: '/ContactDeluxe/Endpoints/login.php',
+                                type : "POST",
+                                dataType : 'json', // data type
+                                data: JSON.stringify($('#login').serializeObject()),
+                                contentType: 'application/json;charset=UTF-8',
+                                success : function(result) {
 
-console.log(result);
-window.location.href = "user.php";
-},
-error: function(xhr, resp, text) {
-//console.log(xhr, resp, text);
+                                    console.log(result);
+                                    window.location.href = "user.php";
+                                },
+                                error: function(xhr, resp, text) {
+                                    //console.log(xhr, resp, text);
 
-var obj = JSON.parse(xhr.responseText);
-console.log(obj.Error);
-$("#rtnlogin").text(obj.Error);
-}
-})
-});
-$("#createuser").on('click', function(){
-	// send ajax
-	$.ajax({
-		url: '/ContactDeluxe/Endpoints/register.php',
-		type : "POST",
-		dataType : 'json', // data type
-		data: JSON.stringify($('#register').serializeObject()),
-		contentType: 'application/json;charset=UTF-8',
-		success : function(result) {
+                                    var obj = JSON.parse(xhr.responseText);
+                                    console.log(obj.Error);
+                                    $("#rtnlogin").text(obj.Error);
+                                }
+                            })
+                        });
+                        $("#createuser").on('click', function(){
+                            // send ajax
+                            $.ajax({
+                                url: '/ContactDeluxe/Endpoints/register.php',
+                                type : "POST",
+                                dataType : 'json', // data type
+                                data: JSON.stringify($('#register').serializeObject()),
+                                contentType: 'application/json;charset=UTF-8',
+                                success : function(result) {
 
-			console.log(result);
-			window.location.href = "user.php";
-		},
-		error: function(xhr, resp, text) {
-			console.log(xhr, resp, text);
+                                    console.log(result);
+                                    window.location.href = "user.php";
+                                },
+                                error: function(xhr, resp, text) {
+                                    console.log(xhr, resp, text);
 
-			var obj = JSON.parse(xhr.responseText);
-			console.log(obj.Error);
-			$("#rtnregister").text(obj.Error);
-		}
-	})
-});
-});
-</script>
-</body>
-</head>
-</html>
+                                    var obj = JSON.parse(xhr.responseText);
+                                    console.log(obj.Error);
+                                    $("#rtnregister").text(obj.Error);
+                                }
+                            })
+                        });
+                    });
+                </script>
+			</div>
+                </body>
+            </head>
+        </html>
