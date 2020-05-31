@@ -22,16 +22,56 @@ $(document).ready(function() {
     $("#my-account").hide();
     $("#mailbox").hide();
     $("#newpass").hide();
+	$("#nocontacts").hide();
     $("#contacts-table").hide();
-
+	var totalcontacts = 0;
     // Search Button
     $("#search-btn").click(function(){
-        $("#contacts-table").show();
+       	$.ajax({
+		url: '/ContactDeluxe/Endpoints/searchContacts.php',
+		type : "POST",
+		dataType : 'json', // data type
+		data: JSON.stringify($('#search').serializeObject()),
+		contentType: 'application/json;charset=UTF-8',
+		success : function(result) {
+			//console.log(result);
+
+			//contact_identity = result.ReturnedID;
+		//	addRow(contact_identity,first, last, phone, address, email);
+
+			//resetForm();
+			$("table").find('tr:gt(0)').remove();
+			var i = 0
+			for (i = 0; i < result.length; i++)
+			{
+
+				addRow(result[i].ContactID,result[i].FirstName, result[i].LastName, result[i].PhoneNumber, result[i].Address, result[i].Email);
+				totalcontacts++;
+			}
+			if (i > 0)
+			{
+				$("#nocontacts").hide();
+				$("#contacts-table").show();
+
+			}
+			else
+			{
+				$("#nocontacts").show();
+				$("#contacts-table").hide();
+			}
+
+
+		},
+		error: function(xhr, resp, text) {
+
+		}
+	});
+
     });
 
     //Show add contact form button
     $(".show-add-btn").click(function(){
-        $("#contacts-table").show();
+
         showAdd();
     });
 
@@ -55,7 +95,6 @@ $(document).ready(function() {
 
     //Reset email / password
 
-
     $(".email").click(function(){
         $("#mailbox").show();
         $("#newpass").hide();
@@ -65,9 +104,50 @@ $(document).ready(function() {
         $("#newpass").show();
         $("#mailbox").hide();
     });
-});
 
-function resetForm(){
+	$.ajax({
+		url: '/ContactDeluxe/Endpoints/searchContacts.php',
+		type : "POST",
+		dataType : 'json', // data type
+		data: JSON.stringify($('#search').serializeObject()),
+		contentType: 'application/json;charset=UTF-8',
+		success : function(result) {
+			//console.log(result);
+
+			//contact_identity = result.ReturnedID;
+		//	addRow(contact_identity,first, last, phone, address, email);
+
+			//resetForm();
+			var i = 0
+			for (i = 0; i < result.length; i++)
+			{
+
+				addRow(result[i].ContactID,result[i].FirstName, result[i].LastName, result[i].PhoneNumber, result[i].Address, result[i].Email);
+			}
+			console.log(result.length);
+			if (result.length > 0)
+			{
+				$("#nocontacts").hide();
+				$("#contacts-table").show();
+			}
+
+
+		},
+		error: function(xhr, resp, text) {
+
+		}
+	});
+
+});
+	function addRow(contactid,firstname, lastname, phone, address, email)
+	{
+		var row = '<tr data-contactid="'+contactid+'"><td>' + firstname + '</td><td>' + lastname + '</td><td>'+ phone + '</td><td>' + address + '</td><td>' + email + '</td><td><button type="button" onclick="showEdit(this.parentNode.parentNode)">Edit</button></td></tr>';
+
+		$("table").find('tbody').append(row);
+	}
+
+
+	function resetForm(){
     $('#first').val('');
     $('#last').val('');
     $('#phone').val('');
@@ -76,12 +156,11 @@ function resetForm(){
     $("#add-contacts").hide();
 }
 
-function addRow(contactid,firstname, lastname, phone, address, email)
-{
-    var row = '<tr data-contactid="'+contactid+'"><td>' + firstname + '</td><td>' + lastname + '</td><td>'+ phone + '</td><td>' + address + '</td><td>' + email + '</td><td><button type="button" onclick="showEdit(this.parentNode.parentNode)">Edit</button></td></tr>';
 
-    $("table").find('tbody').append(row);
-}
+
+
+
+
 
 //Shows the add new contact dialog
 function showAdd()
@@ -115,7 +194,9 @@ function showAdd()
 				addRow(contact_identity,first, last, phone, address, email);
 
 				resetForm();
-
+				 $("#contacts-table").show();
+				$("#nocontacts").hide();
+				totalcontacts++;
 			},
 			error: function(xhr, resp, text) {
 
@@ -166,7 +247,12 @@ function showEdit(curRow)
 
 			$( curRow ).remove();
         	resetForm();
-
+				totalcontacts--;
+				if (totalcontact == 0)
+				{
+					$("#contacts-table").hide();
+					$("#nocontacts").show();
+				}
 			},
 			error: function(xhr, resp, text) {
 
@@ -197,7 +283,7 @@ function showEdit(curRow)
 				//console.log(result);
 
 
-				 curRow.cells[0].innerHTML = first;
+				 	curRow.cells[0].innerHTML = first;
 					curRow.cells[1].innerHTML = last;
 					curRow.cells[2].innerHTML = phone;
 					curRow.cells[3].innerHTML = address;
