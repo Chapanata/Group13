@@ -1,14 +1,7 @@
 <?php
-include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
+include '../session.php';
+date_default_timezone_set("America/New_York");
+$today_date = date("Y-m-d H:i:s");
 
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
@@ -21,92 +14,30 @@ header('Content-Type: application/json');
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-// Confirm required data
-if(isset($data->SessionToken) == FALSE || isset($data->ContactID) == FALSE)
-{
-    // do something
-    error("Missing Parameters");
-    die();
-}
-
-// Get data
-$SessionToken = $data->SessionToken;
-$ContactID = $data->ContactID;
-
 // Optional data
 $FirstName = $data->FirstName;
 $LastName = $data->LastName;
 $PhoneNumber = $data->PhoneNumber;
 $Email = $data->Email;
-$DeleteContact = $data->DeleteContact;
+$Address = $data->Address;
+$Task = intval($data->Task);
+$ContactID = $data->ContactID;
 
 // Create connection
 $conn = dbConnection();
-$UsersTbl = $GLOBALS['table_users'];
 $ContactsTbl = $GLOBALS['table_contacts'];
 
-// Check if user exists
-$result = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$SessionToken'");
-$result->execute();
-$amount = $result->rowCount();
-if($amount <= 0)
+if ($Task == 1)
 {
-    error("Token Not Valid");
-    closeConnectionAndDie($conn);
+	$result = $conn->prepare("UPDATE $ContactsTbl SET FirstName='$FirstName',LastName='$LastName', PhoneNumber='$PhoneNumber', Email='$Email',Address='$Address',LastUpdated='$today_date' WHERE ContactID='$ContactID' and OwnerID='$uid'");
+	$result->execute();
+}
+else if ($Task == 2)
+{
+	$result = $conn->prepare("DELETE FROM $ContactsTbl WHERE UserID='$uid' AND ContactID='$ContactID';");
+	$result->execute();
 }
 
-// Get UserID
-$result = $result->fetch();
-$UserID = $result['UserID'];
-
-// Check if contact exists
-$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE ContactID='$ContactID'");
-$result->execute();
-$amount = $result->rowCount();
-if($amount <= 0)
-{
-    error("Contact not found");
-    closeConnectionAndDie($conn);
-}
-
-// Check if user owns contact
-$result = $result->fetch();
-if($result['OwnerID'] != $UserID)
-{
-    error("No privilege");
-    closeConnectionAndDie($conn);
-}
-
-// Update contact
-$command = "UPDATE $ContactsTbl SET";
-
-$FirstName = $data->FirstName;
-$LastName = $data->LastName;
-$PhoneNumber = $data->PhoneNumber;
-$Email = $data->Email;
-
-if(isset($FirstName))
-    $command .= " FirstName='$FirstName', ";
-if(isset($LastName))
-    $command .= " LastName='$LastName', ";
-if(isset($PhoneNumber))
-    $command .= " PhoneNumber='$PhoneNumber', ";
-if(isset($Email))
-    $command .= " Email='$Email', ";
-$command = rtrim($command, ', ');
-$command .= "  WHERE ContactID='$ContactID'";
-$result = $conn->prepare($command);
-$result->execute();
-
-// Delete Contact
-if(isset($DeleteContact))
-{
-    if($DeleteContact == TRUE)
-    {
-        $updateUser = $conn->prepare("DELETE FROM $ContactsTbl WHERE ContactID='$ContactID'");
-        $updateUser->execute();
-    }
-}
 
 // Close connection
 $conn = null;
@@ -114,3 +45,4 @@ $conn = null;
 success(TRUE);
 
 ?>
+

@@ -1,14 +1,7 @@
 <?php
-include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
+include '../session.php';
+date_default_timezone_set("America/New_York");
+$today_date = date("Y-m-d H:i:s");
 
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
@@ -21,49 +14,33 @@ header('Content-Type: application/json');
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-// Confirm required data
-if(isset($data->SessionToken) == FALSE)
-{
-    // do something
-    error("Missing Parameters");
-    die();
-}
-
-// Get data
-$SessionToken = $data->SessionToken;
-
 // Optional data
 $FirstName = $data->FirstName;
 $LastName = $data->LastName;
 $PhoneNumber = $data->PhoneNumber;
 $Email = $data->Email;
+$Address = $data->Address;
 
 // Create connection
 $conn = dbConnection();
 $UsersTbl = $GLOBALS['table_users'];
 $ContactsTbl = $GLOBALS['table_contacts'];
 
-// Check if user exists
-$result = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$SessionToken'");
-$result->execute();
-$amount = $result->rowCount();
-if($amount <= 0)
-{
-    error("Token Not Valid");
-    closeConnectionAndDie($conn);
-}
-
-// Get UserID
-$result = $result->fetch();
-$UserID = $result['UserID'];
-
 // Insert contact
-$result = $conn->prepare("INSERT INTO $ContactsTbl (OwnerID, FirstName, LastName, PhoneNumber, Email) VALUES ('$UserID', '$FirstName', '$LastName', '$PhoneNumber', '$Email')");
+
+$result = $conn->prepare("INSERT INTO $ContactsTbl VALUES ('$uid',DEFAULT, '$FirstName', '$LastName', '$PhoneNumber', '$Email','$Address','$today_date','$today_date')");
 $result->execute();
+
+$result = null;
+
+$result = $conn->prepare("SELECT MAX(ContactID) AS LU FROM $ContactsTbl WHERE OwnerID='$uid'");
+$result->execute();
+$result = $result->fetch();
+
+echo (json_encode(array('Success' => TRUE,'ReturnedID' => $result['LU'])));
 
 // Close connection
 $conn = null;
 
-success(TRUE);
 
 ?>
