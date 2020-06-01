@@ -3,17 +3,6 @@ include '../connection.php';
 include '../Email Templates/confirmCodeEmailTemplate.php';
 include '../../sendmail.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
-
-/*
-Created by Samuel Arminana (armi.sam99@gmail.com)
- */
-
 // Set response header
 header('Content-Type: application/json');
 
@@ -21,19 +10,28 @@ header('Content-Type: application/json');
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-// Confirm required data
-if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
+if(!isset($data->Email))
 {
-    // do something
-    error("Missing Parameters");
+    error("Missing Email Parameter");
+    die();
+}
+
+if(!isset($data->Password))
+{
+    error("Missing Password Parameter");
+    die();
+}
+
+if(!isset($data->Name))
+{
+    error("Missing Name Parameter");
     die();
 }
 
 // Get data
 $Email = $data->Email;
 $Fullname = $data->Name;
-// Hash password
-$Password = md5($data->Password);
+$Password = md5($data->Password); // Hash password
 
 // Create connection
 $conn = dbConnection();
@@ -50,37 +48,8 @@ if($amount > 0)
     closeConnectionAndDie($conn);
 }
 
-// Generate confirm code
+// Generate Confirm Code and Email
 $confirmCode = rand(1000,9999);
-
-// Send email
-//$mail = new PHPMailer;
-
-// Don't use SMTP, just use mail function
-//$mail->SMTPDebug = 3;
-//$mail->isSMTP();
-//$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-//$mail->Host = "smtp.gmail.com";
-//$mail->SMTPAuth = true;
-//$mail->Username = $app_email;
-//$mail->Password = $app_pass;
-//$mail->Port = 587;
-
-//$mail->setFrom("info@contactdeluxe.com", "Contact Manager Deluxe");
-//$mail->addAddress($Email);
-//$mail->isHTML(true);
-//$mail->Subject = "Your Registration to Contact Manager Deluxe";
-//$mail->Body = getEmail($confirmCode, $Email);
-//$mail->AltBody = "Your confirmation code is " . $confirmCode;
-/*
-if(!$mail->send())
-{
-    error("Couldn't send email ");
-    closeConnectionAndDie($conn);
-}
-*/
-// Add user entry
-
 $mail = new NewMail();
 $mail->Subject = "Your Registration to Contact Manager Deluxe";
 $mail->Email = $Email;

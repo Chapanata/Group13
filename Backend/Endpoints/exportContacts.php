@@ -1,6 +1,5 @@
 
 <?php
-
 include '../session.php';
 date_default_timezone_set("America/New_York");
 $today_date = date("Y_m_dHis");

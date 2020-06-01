@@ -11,9 +11,10 @@ $data = json_decode($json);
 
 if (!isset($data->Task))
 {
-	error("Task not initiated");
+	error("Task Not Initiated");
 	die();
 }
+
 $Task = intval($data->Task);
 $Password = "";
 $Name = "";
@@ -32,10 +33,17 @@ if (isset($data->SessionToken))
 	$getuid = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$sToken'");
 	$getuid->execute();
 	$getuid = $getuid->fetch();
-	$uid = $getuid['UserID'];
+	$currentUser = $getuid['UserID'];
 }
 else
 {
+	// If UserID is missing, SessionToken must be missing
+	if (!isset($uid))
+	{
+		error("Missing SessionToken");
+		die();
+	}
+
 	// Through Session
 	$currentUser = $uid;
 }
@@ -44,28 +52,28 @@ else
 // Tasks
 if ($Task == 1)
 {
-	// Change Name
+	// Missing Name
 	if (!isset($data->FullName))
 	{
 		error("Missing Name Parameter");
 		die();
 	}
 
+	// Change Name
 	$Name = $data->FullName;
-	error_log("UPDATE $UsersTbl SET Name='$Name' WHERE UserID='$currentUser' ");
-	error_log(" '$Password' '$Task' '$Name'");
 	$result = $conn->prepare("UPDATE $UsersTbl SET Name='$Name' WHERE UserID='$currentUser' ");
 	$result->execute();
 	success(TRUE);
-
 }
 else if ($Task == 2)
 {
+	// Missing Password & Confirm
 	if (!isset($data->Password))
 	{
 		error("Missing Password Parameter");
 		die();
 	}
+
 	if (!isset($data->Confirm))
 	{
 		error("Missing Confirm Parameter");
@@ -78,18 +86,18 @@ else if ($Task == 2)
 		// No Match
 		$ers .= "Password Must Match.";
 	}
+
 	if(!preg_match('/[A-Z]/', $data->Confirm))
 	{
-		$ers .= "Password Must Contain uppercases.";
+		$ers .= "Password Must Contain Uppercases.";
  		// There is no upper
 	}
+
 	if (strlen($data->Confirm) < 8)
 	{
 		// Length is less than 8
-		$ers .= "Password Must Be Longer than 8 characters.";
+		$ers .= "Password Must Be Longer than 8 Characters.";
 	}
-
-
 
 	if (strlen($ers) > 0)
 	{
@@ -105,8 +113,6 @@ else if ($Task == 2)
 		$result->execute();
 		success(TRUE);
 	}
-
-
 }
 
 

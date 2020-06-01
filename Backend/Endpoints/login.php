@@ -1,30 +1,27 @@
 <?php
 include '../session.php';
 
-/*
-Created by Samuel Arminana (armi.sam99@gmail.com)
- */
-
 // Set response header
 header('Content-Type: application/json');
 
 // Read raw data from the request
-
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-// Confirm required data
-if(isset($data->Email) == FALSE || isset($data->Password) == FALSE)
+if(!isset($data->Email))
 {
-    // do something
-	error("Missing Parameters");
+	error("Missing Email Parameter");
     die();
 }
 
-// Get data
+if(!isset($data->Password))
+{
+	error("Missing Password Parameter");
+    die();
+}
+
 $Email = $data->Email;
-// Hash password
-$Password = md5($data->Password);
+$Password = md5($data->Password); // Hash password
 
 // Create connection
 $conn = dbConnection();
@@ -38,7 +35,7 @@ $amount = $result->rowCount();
 // No user found
 if($amount <= 0)
 {
-    error("Incorrect email or password.");
+    error("Incorrect Email Or Password.");
     closeConnectionAndDie($conn);
 }
 
@@ -46,7 +43,7 @@ if($amount <= 0)
 $result = $result->fetch();
 if($result['Confirmed'] != 1)
 {
-    error("User not confirmed");
+    error("Your account has not yet been confirmed");
     closeConnectionAndDie($conn);
 }
 
@@ -64,9 +61,5 @@ $conn = null;
 $_SESSION['current_uid'] = $result['UserID'];
 $_SESSION['current_name'] = $result['Name'];
 $_SESSION['current_email'] = $Email;
-
-
 user($result['UserID'], $result['Name'], $SessionToken);
-
-
 ?>
