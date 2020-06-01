@@ -9,24 +9,25 @@ $json = file_get_contents('php://input');
 $data = json_decode($json);
 
 
-
-$Task = intval($data->Task);
-if (!isset($Task))
+if (!isset($data->Task))
 {
-	error("Task not init");
+	error("Task not initiated");
 	die();
 }
+$Task = intval($data->Task);
 $Password = "";
 $Name = "";
 
-// Create connection
+// Connection
 $conn = dbConnection();
 $ContactsTbl = $GLOBALS['table_contacts'];
 $UsersTbl = $GLOBALS['table_users'];
 $currentUser = "";
-// Running through api
+
+// Instance Verification
 if (isset($data->SessionToken))
 {
+	// Through API
 	$sToken = $data->SessionToken;
 	$getuid = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$sToken'");
 	$getuid->execute();
@@ -35,14 +36,21 @@ if (isset($data->SessionToken))
 }
 else
 {
+	// Through Session
 	$currentUser = $uid;
 }
 
 
-
-// Change Name
+// Tasks
 if ($Task == 1)
 {
+	// Change Name
+	if (!isset($data->FullName))
+	{
+		error("Missing Name Parameter");
+		die();
+	}
+
 	$Name = $data->FullName;
 	error_log("UPDATE $UsersTbl SET Name='$Name' WHERE UserID='$currentUser' ");
 	error_log(" '$Password' '$Task' '$Name'");
@@ -53,6 +61,17 @@ if ($Task == 1)
 }
 else if ($Task == 2)
 {
+	if (!isset($data->Password))
+	{
+		error("Missing Password Parameter");
+		die();
+	}
+	if (!isset($data->Confirm))
+	{
+		error("Missing Confirm Parameter");
+		die();
+	}
+
 	$ers = "";
 	if ($data->Password != $data->Confirm)
 	{
@@ -72,26 +91,27 @@ else if ($Task == 2)
 
 
 
-if (strlen($ers) > 0)
-{
-	error($ers);
-	closeConnectionAndDie($conn);
-}else
-{
-	$Password = md5($data->Confirm);   // Hash password
-	$result = $conn->prepare("UPDATE $UsersTbl SET Password='$Password' WHERE UserID='$currentUser' ");
-	$result->execute();
-	success(TRUE);
+	if (strlen($ers) > 0)
+	{
+		// Execute Errors
+		error($ers);
+		closeConnectionAndDie($conn);
+	}
+	else
+	{
+		// Change Password
+		$Password = md5($data->Confirm);
+		$result = $conn->prepare("UPDATE $UsersTbl SET Password='$Password' WHERE UserID='$currentUser' ");
+		$result->execute();
+		success(TRUE);
+	}
 
-}
-// Change Password
 
 }
 
 
 // Close connection
 $conn = null;
-
 
 ?>
 
