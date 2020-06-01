@@ -12,14 +12,10 @@ header('Content-Type: application/json');
 
 // Read raw data from the request
 $json = file_get_contents('php://input');
+error_log($json);
 $data = json_decode($json);
 
-// Optional data
-$FirstName = $data->FirstName;
-$LastName = $data->LastName;
-$PhoneNumber = $data->PhoneNumber;
-$Email = $data->Email;
-$Address = $data->Address;
+// Edit: 1 Delete:2
 $Task = intval($data->Task);
 $ContactID = $data->ContactID;
 
@@ -41,15 +37,21 @@ else
 {
 	$currentUser = $uid;
 }
-
+error_log($Task);
 if ($Task == 1)
 {
+	$FirstName = $data->FirstName;
+	$LastName = $data->LastName;
+	$PhoneNumber = $data->PhoneNumber;
+	$Email = $data->Email;
+	$Address = $data->Address;
+
 	$result = $conn->prepare("UPDATE $ContactsTbl SET FirstName='$FirstName',LastName='$LastName', PhoneNumber='$PhoneNumber', Email='$Email',Address='$Address',LastUpdated='$today_date' WHERE ContactID='$ContactID' and OwnerID='$currentUser'");
 	$result->execute();
 }
 else if ($Task == 2)
 {
-	$result = $conn->prepare("DELETE FROM $ContactsTbl WHERE UserID='$currentUser' AND ContactID='$ContactID';");
+	$result = $conn->prepare("DELETE FROM $ContactsTbl WHERE OwnerID='$currentUser' AND ContactID='$ContactID';");
 	$result->execute();
 }
 

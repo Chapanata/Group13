@@ -159,7 +159,7 @@ td, th {
     text-align: center;
 }
 
-#mailbox{
+#namebox{
     position: absolute;
     width: 30%;
     height: 55%;
@@ -171,12 +171,12 @@ td, th {
     margin-top: 2%;
 }
 
-#mailbox h2 {
+#namebox h2 {
     margin-top: 10%;
     margin-bottom: 10%;
 }
 
-#mailbox input {
+#namebox input {
     padding: 10px 10px 10px;
     font-size: 28px;
     width: 60%;
@@ -208,7 +208,7 @@ td, th {
 }
 
 #newpass input {
-    padding: 10px 10px 10px;
+ padding: 10px 10px 10px;
     font-size: 28px;
     width: 60%;
     height: 5%;

@@ -22,7 +22,7 @@ body {
     width: 390px;
     height: 43px;
     position: relative;
-    box-shadow: 0 0 20px 9px #8d938f;  
+    box-shadow: 0 0 20px 9px #8d938f;
     border-radius: 30px;
     transition: 0.5s;
 }
@@ -61,7 +61,7 @@ body {
     position: absolute;
 }
 
-html {   
+html {
     font-weight: 300;
     font-size: 20px;
     text-rendering: optimizeLegibility;
@@ -93,7 +93,7 @@ html {
     width: 200px;
     margin-bottom: 20px;
     height: 40px;
-    margin-left: 140px;
+
     padding: 10px;
     align-items: flex-start;
     text-align: center;

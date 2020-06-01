@@ -29,7 +29,7 @@ if (!isset($uid))
         <div class="main-form">
             <p style="padding:10px;background:rgb(119, 119, 119);color:white;display:inline;">Welcome Back <?php echo $name; ?></p>
             <div class="menu-bar">
-                    <button id="contact-button" type="button">Contact Manger</button>
+                    <button id="contact-button" type="button">Contact Manager</button>
                     <button id="account-button" type="button">My Account</button>
             </div>
 
@@ -37,25 +37,26 @@ if (!isset($uid))
                 <!-- Search Form -->
                 <form id="search">
                     <h1 class="header">Search for Contacts</h1>
-                    <input type="text" placeholder="Search Contact..">
+                    <input type="text" name="SearchQuery" placeholder="Search Contact..">
                     <button id="search-btn" type="button">Search User</button>
                     <button class="show-add-btn" type="button">Add Contact</button>
 
                     <br><br>
                     <div id="contacts-table">
-                        <table>
-                            <thead>
+                        <table >
+                            <thead style="background-color: white;">
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Phone Number</th>
                                 <th>Address</th>
                                 <th>E-Mail Address</th>
-                                <th>Edit</th>
+                                <th>Options</th>
                             </thead>
                             <tbody class="scrollable"/>
-							</tbody>
+
                         </table>
                     </div>
+					<p id="nocontacts" style="text-align:center;color:gray;">No contacts found</p>
                 </form>
 
                 <!-- Add Contacts -->
@@ -89,29 +90,39 @@ if (!isset($uid))
                 <form id="my-account">
                     <h1 class="header">My Account</h1>
                     <div class="change-fields">
-                        <button type="button" class="email">Change E-Mail</button>
+                        <button type="button" class="name">Change Name</button>
                         <button type="button" class="password">Change Password</button>
+						<button type="button" class="export">Export Contacts</button>
                         <button type="button" class="logout"><a href="logout.php">Log Out</a></button>
                     </div>
 
-                    <div id="mailbox">
-                        <h2>Change E-Mail Address</h2>
-                        <input type="email" name="email" placeholder="Enter New E-Mail Address" required>
+                    <div id="namebox">
+
+                        <h2>Change Name</h2>
+                        <input type="text" name="FullName" placeholder="Modify Name" value="<?php echo $name; ?>" required>
                         <br>
-                        <input type="email" name="email" placeholder="Confirm E-Mail Address" required>
                         <br>
-                        <button type="button" >Submit</button>
+                        <button type="button" id="change_name_btn" >Change Name</button>
+							<input type="hidden" name="Task" value="1">
+
                     </div>
 
-                    <div id="newpass">
-                        <h2>Change Password</h2>
-                        <input type="password" name="password" placeholder="Enter New Password" required>
-                        <br>
-                        <input type="password" name="password" placeholder="Confirm Password" required>
-                        <br>
-                        <button type="button" >Submit</button>
-                    </div>
+
                 </form>
+
+                    <div id="newpass">
+
+						 <form id="changepassword">
+
+                          <div id="rtnvalid" style="text-align:center;color:red;"></div>
+                            <input type="password" id="password" name="Password" placeholder="Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one uppercase and lowercase letter, and at least 8 or more characters" required>
+                            <input type="password" id="confirm" name="Confirm" placeholder="Confirm Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Confirm Password"  required>
+							 <input type="hidden" name="Task" value="2">
+
+                        <input type="button" id="change_pass_btn" name="" value="Change">
+
+                    </form>
+                    </div>
                 <!-- Log Out-->
 
             </div>
@@ -119,5 +130,11 @@ if (!isset($uid))
         </div>
 
 
+
     </body>
 </html>
+
+
+
+
+

@@ -1,5 +1,0 @@
-<?php
-
-# Contacts Page
-
-?>

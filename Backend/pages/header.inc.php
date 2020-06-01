@@ -1,5 +1,0 @@
-<?php
-
-# Contains Header & Dependencies
-
-?>

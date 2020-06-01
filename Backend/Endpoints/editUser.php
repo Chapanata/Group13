@@ -1,9 +1,5 @@
 <?php
-include '../connection.php';
-
-/*
-Created by Samuel Arminana (armi.sam99@gmail.com)
- */
+include '../session.php';
 
 // Set response header
 header('Content-Type: application/json');
@@ -12,81 +8,90 @@ header('Content-Type: application/json');
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-// Confirm required data
-if(isset($data->SessionToken) == FALSE)
+
+
+$Task = intval($data->Task);
+if (!isset($Task))
 {
-    // do something
-    error("Missing Parameters");
-    die();
+	error("Task not init");
+	die();
 }
-
-// Get data
-$SessionToken = $data->SessionToken;
-
-// Optional data
-$Name = $data->Name;
-if(isset($data->Password))
-    $Password = md5($data->Password);   // Hash password
-else
-    $Password = NULL;
-$DeleteUser = $data->DeleteUser;
+$Password = "";
+$Name = "";
 
 // Create connection
 $conn = dbConnection();
+$ContactsTbl = $GLOBALS['table_contacts'];
 $UsersTbl = $GLOBALS['table_users'];
-
-// Check if user exists
-$result = $conn->prepare("SELECT * FROM $UsersTbl WHERE SessionToken='$SessionToken'");
-$result->execute();
-$amount = $result->rowCount();
-if($amount <= 0)
+$currentUser = "";
+// Running through api
+if (isset($data->SessionToken))
 {
-    error("Token Not Valid");
-    closeConnectionAndDie($conn);
+	$sToken = $data->SessionToken;
+	$getuid = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$sToken'");
+	$getuid->execute();
+	$getuid = $getuid->fetch();
+	$uid = $getuid['UserID'];
+}
+else
+{
+	$currentUser = $uid;
 }
 
-if(isset($Name) || isset($Password))
+
+
+// Change Name
+if ($Task == 1)
 {
-    $command = "UPDATE $UsersTbl SET";
+	$Name = $data->FullName;
+	error_log("UPDATE $UsersTbl SET Name='$Name' WHERE UserID='$currentUser' ");
+	error_log(" '$Password' '$Task' '$Name'");
+	$result = $conn->prepare("UPDATE $UsersTbl SET Name='$Name' WHERE UserID='$currentUser' ");
+	$result->execute();
+	success(TRUE);
 
-    // Don't judge me here...
+}
+else if ($Task == 2)
+{
+	$ers = "";
+	if ($data->Password != $data->Confirm)
+	{
+		// No Match
+		$ers .= "Password Must Match.";
+	}
+	if(!preg_match('/[A-Z]/', $data->Confirm))
+	{
+		$ers .= "Password Must Contain uppercases.";
+ 		// There is no upper
+	}
+	if (strlen($data->Confirm) < 8)
+	{
+		// Length is less than 8
+		$ers .= "Password Must Be Longer than 8 characters.";
+	}
 
-    // Update Name
-    if(isset($Name))
-    {
-        $command .= " Name='$Name'";
-    }
-    // Update Password
-    if(isset($Password))
-    {
-        if(isset($Name))
-        {
-            $command .= ",";
-        }
-        $command .= " Password='$Password'";
-    }
 
-    // Resume judgement
 
-    $command .= " WHERE SessionToken='$SessionToken'";
-    $updateUser = $conn->prepare($command);
-    $updateUser->execute();
+if (strlen($ers) > 0)
+{
+	error($ers);
+	closeConnectionAndDie($conn);
+}else
+{
+	$Password = md5($data->Confirm);   // Hash password
+	$result = $conn->prepare("UPDATE $UsersTbl SET Password='$Password' WHERE UserID='$currentUser' ");
+	$result->execute();
+	success(TRUE);
+
+}
+// Change Password
+
 }
 
-// Delete User
-if(isset($DeleteUser))
-{
-    if($DeleteUser == TRUE)
-    {
-        $updateUser = $conn->prepare("DELETE FROM $UsersTbl WHERE SessionToken='$SessionToken'");
-        $updateUser->execute();
-    }
-}
 
 // Close connection
 $conn = null;
 
-success(TRUE);
 
 ?>
 

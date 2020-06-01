@@ -1,5 +1,0 @@
-<?php
-
-# Account Page
-
-?>

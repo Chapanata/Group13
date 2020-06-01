@@ -1,5 +1,0 @@
-<?php
-
-# Navigation Page
-
-?>

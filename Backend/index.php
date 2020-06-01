@@ -32,7 +32,7 @@ if(isset($_SESSION['current_uid']))
                     <form id="login" action="" method="post" class="input-group">
                         <div id="rtnlogin" style="text-align:center;color:red;"></div>
                         <div class="input-box">
-                            <input type="text"  name="Email" placeholder="E-Mail Address" required>
+                            <input type="text"  name="Email" placeholder="E-mail Address" required>
 
                         </div>
                         <div class="input-box">
@@ -47,7 +47,7 @@ if(isset($_SESSION['current_uid']))
 
                     <!-- Register -->
 
-                    <form id="register" action="" method="post" class="input-group">
+                    <form id="register" method="post" class="input-group" >
                         <div id="rtnregister" style="text-align:center;color:red;"></div>
                         <div class="register-box">
                             <input type="text" name="Name" placeholder="Full Name" required>
@@ -131,6 +131,7 @@ if(isset($_SESSION['current_uid']))
                             document.getElementById("confirmpassword").style.display = "none";
                     }
 
+
                 </script>
                 <script>$(document).ready(function(){
 
@@ -152,6 +153,7 @@ if(isset($_SESSION['current_uid']))
                         };
 
                         $("#signin").on('click', function(){
+							 event.preventDefault();
                             // send ajax
                             $.ajax({
                                 url: '/ContactDeluxe/Endpoints/login.php',
@@ -173,8 +175,10 @@ if(isset($_SESSION['current_uid']))
                                 }
                             })
                         });
-                        $("#createuser").on('click', function(){
-                            // send ajax
+					  $("#createuser").on('click', function(){
+						if (letter.classList.contains("valid") && capital.classList.contains("valid") && length.classList.contains("valid"))
+						{
+
                             $.ajax({
                                 url: '/ContactDeluxe/Endpoints/register.php',
                                 type : "POST",
@@ -183,8 +187,9 @@ if(isset($_SESSION['current_uid']))
                                 contentType: 'application/json;charset=UTF-8',
                                 success : function(result) {
 
-                                    console.log(result);
+
                                     window.location.href = "user.php";
+
                                 },
                                 error: function(xhr, resp, text) {
                                     console.log(xhr, resp, text);
@@ -192,9 +197,17 @@ if(isset($_SESSION['current_uid']))
                                     var obj = JSON.parse(xhr.responseText);
                                     console.log(obj.Error);
                                     $("#rtnregister").text(obj.Error);
+
                                 }
                             })
-                        });
+
+
+
+						}
+
+					 });
+
+
                     });
                 </script>
 			</div>

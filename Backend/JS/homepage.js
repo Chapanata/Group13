@@ -20,10 +20,12 @@ $(document).ready(function() {
     $(".seperator").hide();
     $("#add-contacts").hide();
     $("#my-account").hide();
-    $("#mailbox").hide();
+    $("#namebox").hide();
     $("#newpass").hide();
 	$("#nocontacts").hide();
     $("#contacts-table").hide();
+	$("#contact-button").css("color","#8cc1ff");
+	$("#account-button").css("color","black");
 	var totalcontacts = 0;
     // Search Button
     $("#search-btn").click(function(){
@@ -78,6 +80,8 @@ $(document).ready(function() {
     //Contact Manager
     $("#contact-button").click(function(){
         $("#search").show("fast");
+		$("#contact-button").css("color","#8cc1ff");
+		$("#account-button").css("color","black");
         $("#add-contacts").hide();
         $("#my-account").hide();
         $("#mailbox").hide();
@@ -90,13 +94,15 @@ $(document).ready(function() {
         $("#search").hide();
         $(".seperator").hide();
         $("#add-contacts").hide();
+		$("#contact-button").css("color","black");
+		$("#account-button").css("color","#8cc1ff");
     });
 
 
     //Reset email / password
 
-    $(".email").click(function(){
-        $("#mailbox").show();
+    $(".name").click(function(){
+        $("#namebox").show();
         $("#newpass").hide();
     });
 
@@ -104,6 +110,10 @@ $(document).ready(function() {
         $("#newpass").show();
         $("#mailbox").hide();
     });
+	$(".export").click(function(){
+
+		  window.location.href = "/ContactDeluxe/Endpoints/exportContacts.php";
+	});
 
 	$.ajax({
 		url: '/ContactDeluxe/Endpoints/searchContacts.php',
@@ -130,12 +140,54 @@ $(document).ready(function() {
 				$("#nocontacts").hide();
 				$("#contacts-table").show();
 			}
+			else
+			{
+				$("#nocontacts").show();
+
+			}
 
 
 		},
 		error: function(xhr, resp, text) {
 
 		}
+	});
+
+	$("#change_name_btn").click(function(){
+		$.ajax({
+			url: '/ContactDeluxe/Endpoints/editUser.php',
+			type : "POST",
+			dataType : 'json', // data type
+			data: JSON.stringify($('#my-account').serializeObject()),
+			contentType: 'application/json;charset=UTF-8',
+			success : function(result) {
+			console.log(result);
+
+
+			},
+			error: function(xhr, resp, text) {
+				console.log(xhr ,resp, text);
+			}
+		});
+	});
+	$("#change_pass_btn").click(function(){
+		$.ajax({
+			url: '/ContactDeluxe/Endpoints/editUser.php',
+			type : "POST",
+			dataType : 'json', // data type
+			data: JSON.stringify($('#changepassword').serializeObject()),
+			contentType: 'application/json;charset=UTF-8',
+			success : function(result) {
+
+				$("#rtnvalid").text("Password Changed Successfully.");
+				 window.location.href = "user.php";
+			},
+			error: function(xhr, resp, text) {
+			 var obj = JSON.parse(xhr.responseText);
+			console.log(obj.Error);
+			$("#rtnvalid").text(obj.Error);
+			}
+		});
 	});
 
 });

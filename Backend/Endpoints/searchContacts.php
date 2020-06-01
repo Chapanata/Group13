@@ -1,14 +1,5 @@
 <?php
-include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
+include '../session.php';
 
 /*
 Created by Samuel Arminana (armi.sam99@gmail.com)
@@ -21,36 +12,27 @@ header('Content-Type: application/json');
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-// Confirm required data
-if(isset($data->SessionToken) == FALSE || isset($data->SearchQuery) == FALSE)
-{
-    // do something
-    error("Missing Parameters");
-    die();
-}
-
-// Get data
-$SessionToken = $data->SessionToken;
-$SearchQuery = trim($data->SearchQuery);
-
 // Create connection
 $conn = dbConnection();
-$UsersTbl = $GLOBALS['table_users'];
 $ContactsTbl = $GLOBALS['table_contacts'];
 
-// Check if user exists
-$result = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$SessionToken'");
-$result->execute();
-$amount = $result->rowCount();
-if($amount <= 0)
+$SearchQuery = trim($data->SearchQuery);
+$SearchLength = strlen($SearchQuery);
+$currentUser = "";
+// Running through api
+if (isset($data->SessionToken))
 {
-    error("Token Not Valid");
-    closeConnectionAndDie($conn);
+	$sToken = $data->SessionToken;
+	$getuid = $conn->prepare("SELECT UserID FROM $UsersTbl WHERE SessionToken='$sToken'");
+	$getuid->execute();
+	$getuid = $getuid->fetch();
+	$uid = $getuid['UserID'];
+}
+else
+{
+	$currentUser = $uid;
 }
 
-// Get UserID
-$result = $result->fetch();
-$UserID = $result['UserID'];
 
 // Check if contact exists
 
@@ -68,47 +50,17 @@ WHEN a.title LIKE 'somthing%' THEN 1
 WHEN a.title LIKE '%somthing%' THEN 2
 WHEN a.title LIKE '%somthing' THEN 3
 ELSE 4 END;*/
-$result = $conn->prepare("SELECT ContactID, FirstName, LastName, PhoneNumber, Email FROM $ContactsTbl WHERE OwnerID='$UserID' AND
+if ($SearchLength > 0)
+{
+	error_log("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' AND (FirstName LIKE '".$SearchQuery."%' OR LastName LIKE '".$SearchQuery."%' OR Email LIKE '".$SearchQuery."%' OR Address LIKE '".$SearchQuery."%' OR PhoneNumber LIKE '".$SearchQuery."%') ORDER BY LastUpdated DESC");
 
-(
-(FirstName LIKE '$SearchQuery%'
-OR FirstName LIKE '%$SearchQuery%'
-OR FirstName LIKE '$SearchQuery%')
-OR
-(
-LastName LIKE '$SearchQuery%'
-OR LastName LIKE '%$SearchQuery%'
-OR LastName LIKE '$SearchQuery%'
-)
-OR
-(
-Email LIKE '$SearchQuery%'
-OR Email LIKE '%$SearchQuery%'
-OR Email LIKE '$SearchQuery%'
-)
-OR
-(
-PhoneNumber LIKE '$SearchQuery%'
-OR PhoneNumber LIKE '%$SearchQuery%'
-OR PhoneNumber LIKE '$SearchQuery%'
-)
-)
-ORDER BY case
-WHEN FirstName LIKE '$SearchQuery%' THEN 1
-WHEN LastName LIKE '$SearchQuery%' THEN 1
-WHEN Email LIKE '$SearchQuery%' THEN 1
-WHEN PhoneNumber LIKE '$SearchQuery%' THEN 1
-WHEN FirstName LIKE '%$SearchQuery%' THEN 2
-WHEN LastName LIKE '%$SearchQuery%' THEN 2
-WHEN Email LIKE '%$SearchQuery%' THEN 2
-WHEN PhoneNumber LIKE '%$SearchQuery%' THEN 2
-WHEN FirstName LIKE '%$SearchQuery' THEN 3
-WHEN LastName LIKE '%$SearchQuery' THEN 3
-WHEN Email LIKE '%$SearchQuery' THEN 3
-WHEN PhoneNumber LIKE '%$SearchQuery' THEN 3
-ELSE 4 END
+	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' AND (FirstName LIKE '".$SearchQuery."%' OR LastName LIKE '".$SearchQuery."%' OR Email LIKE '".$SearchQuery."%' OR Address LIKE '".$SearchQuery."%' OR PhoneNumber LIKE '".$SearchQuery."%') ORDER BY LastUpdated DESC");
 
-LIMIT 250 ");
+}
+else
+{
+	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' ORDER BY LastUpdated DESC");
+}
 
 //"(FirstName LIKE '%$SarchQuery%'
 //OR LastName LIKE '%$SearchQuery%'
@@ -117,11 +69,8 @@ LIMIT 250 ");
 //) LIMIT 250");
 $result->execute();
 $result = $result->fetchAll();
-$json = json_encode($result);
 
+echo json_encode($result);
 // Close connection
 $conn = null;
-
-die($json);
-
 ?>
