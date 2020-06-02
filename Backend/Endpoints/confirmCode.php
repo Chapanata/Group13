@@ -37,7 +37,7 @@ if($amount <= 0)
 $result = $result->fetch();
 if($result['ConfirmCode'] != $Code)
 {
-    success(FALSE);
+    error("Code Does not match");
     closeConnectionAndDie($conn);
 }
 

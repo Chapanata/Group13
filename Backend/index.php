@@ -6,6 +6,8 @@ if(isset($_SESSION['current_uid']))
 	echo 'window.location.href = "user.php"';
 	echo '</script>';
 }
+$color = (isset($_GET['Success']))?"green":"red";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +38,7 @@ if(isset($_SESSION['current_uid']))
                     </div>
 					 <!-- Login -->
                     <form id="login" action="" method="post" class="input-group">
-                        <div id="rtnlogin" style="text-align:center;color:green;"><?php echo (isset($_GET['success']))?$_GET['success']:""; ?></div>
+                        <div id="rtnlogin" style="text-align:center;color:<?php echo $color; ?>"><?php echo (isset($_GET['Success']))?$_GET['Success']:""; ?></div>
                         <div class="input-box">
                             <input type="text"  name="Email" placeholder="E-mail Address" required>
 
@@ -93,7 +95,7 @@ if(isset($_SESSION['current_uid']))
                         <div class="register-box">
 
                             <input type="password" id="password" name="Password" placeholder="New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one uppercase and lowercase letter, and at least 8 or more characters" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Follow Password Requirements' : ''); if(this.checkValidity()) form.confirm.pattern = this.value;" required>
-                            <input type="password" id="confirm" name="Confirm" placeholder="Confirm New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Confirm Password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Passwords do not match' : '');" required>
+                            <input type="password" id="confirm" name="confirm" placeholder="Confirm New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Confirm Password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Passwords do not match' : '');" required>
 							<input type="hidden" name="Email" value="<?php echo $_GET['Email']; ?>">
 							<input type="hidden" name="Code" value="<?php echo $_GET['Code']; ?>">
 							<input type="hidden" name="Task" value="<?php echo $_GET['Task']; ?>">
@@ -215,12 +217,13 @@ if(isset($_SESSION['current_uid']))
 
                                     var obj = JSON.parse(xhr.responseText);
                                     console.log(obj.Error);
+									$("#rtnlogin").css("color","red");
                                     $("#rtnlogin").text(obj.Error);
                                 }
                             })
                         });
 					  $("#createuser").on('click', function(){
-						if (letter.classList.contains("valid") && capital.classList.contains("valid") && length.classList.contains("valid"))
+						if (letter.classList.contains("valid") && capital.classList.contains("valid") && length.classList.contains("valid") && (passwordInput.value == confirmInput.value))
 						{
 
                             $.ajax({
@@ -284,7 +287,7 @@ if(isset($_SESSION['current_uid']))
 
 					 });
 						$("#resetpassword").on('click',function(){
-						if (letter.classList.contains("valid") && capital.classList.contains("valid") && length.classList.contains("valid"))
+						if (letter.classList.contains("valid") && capital.classList.contains("valid") && length.classList.contains("valid") && (passwordInput.value == confirmInput.value))
 						{
 							  $.ajax({
                                 url: '/ContactDeluxe/Endpoints/resetPassword.php',
