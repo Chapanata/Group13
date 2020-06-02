@@ -1,19 +1,5 @@
 <?php
 include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
-
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
-
-/*
-Created by Samuel Arminana (armi.sam99@gmail.com)
- */
-
 // Set response header
 header('Content-Type: application/json');
 
@@ -62,7 +48,7 @@ if($result['Confirmed'] != 1)
 // Check code
 if($result['ConfirmCode'] != $Code)
 {
-    error("No match found");
+    error("Invalid Reset Code. Please Try Again.");
     closeConnectionAndDie($conn);
 }
 

@@ -1,18 +1,8 @@
 <?php
 include '../connection.php';
-include 'confirmCodeEmailTemplate.php';
+include '../Email Templates/forgotPasswordEmailTemplate.php';
+include '../../sendmail.php';
 
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require '../phpMailer/Exception.php';
-require '../phpMailer/PHPMailer.php';
-require '../phpMailer/SMTP.php';
-
-/*
-Created by Samuel Arminana (armi.sam99@gmail.com)
- */
 
 // Set response header
 header('Content-Type: application/json');
@@ -22,17 +12,9 @@ $json = file_get_contents('php://input');
 $data = json_decode($json);
 
 // Confirm required data
-if(isset($data->Email) == FALSE)
+if(!isset($data->Email))
 {
-    // do something
-    error("Missing Parameters");
-    die();
-}
-
-// Confirm valid email
-if(filter_var($data->Email, FILTER_VALIDATE_EMAIL) == FALSE)
-{
-    error("Email is not valid");
+    error("Missing Email Parameter");
     die();
 }
 
@@ -44,13 +26,13 @@ $conn = dbConnection();
 $UsersTbl = $GLOBALS['table_users'];
 
 // Check if user exists
-$result = $conn->prepare("SELECT Email, Confirmed FROM $UsersTbl WHERE Email='$Email'");
+$result = $conn->prepare("SELECT * FROM $UsersTbl WHERE Email='$Email'");
 $result->execute();
 $amount = $result->rowCount();
 
 if($amount <= 0)
 {
-    error("User does not exist");
+    error("Email does not exist");
     closeConnectionAndDie($conn);
 }
 
@@ -58,36 +40,23 @@ if($amount <= 0)
 $result = $result->fetch();
 if($result['Confirmed'] == 0)
 {
-    error("User not confirmed");
+    error("Account must be verified first");
     closeConnectionAndDie($conn);
 }
+$Fullname = $result['Name'];
 
-// Generate confirm code
+// Generate Confirm Code and Email
 $confirmCode = rand(1000,9999);
-
-// Send email
-$mail = new PHPMailer;
-
-// Don't use SMTP, just use mail function
-//$mail->SMTPDebug = 3;
-//$mail->isSMTP();
-//$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-//$mail->Host = "smtp.gmail.com";
-//$mail->SMTPAuth = true;
-//$mail->Username = $app_email;
-//$mail->Password = $app_pass;
-//$mail->Port = 587;
-
-$mail->setFrom($app_email, "Contact Manager Deluxe");
-$mail->addAddress($Email);
-$mail->isHTML(true);
-$mail->Subject = "Forgotten Password to Contact Manager Deluxe";
-$mail->Body = getEmail($confirmCode, $Email);
+$mail = new NewMail();
+$mail->Subject = "Reset Your Password - Contact Manager Deluxe";
+$mail->Email = $Email;
+$mail->Name = $Fullname;
+$mail->Body = getEmail($confirmCode, $Email,$Fullname);
 $mail->AltBody = "Your reset code is " . $confirmCode;
 
 if(!$mail->send())
 {
-    error("Internal Error " . $app_pass . $app_email . $conn->error);
+    error("Couldn't send email");
     closeConnectionAndDie($conn);
 }
 
@@ -100,7 +69,7 @@ $updateUser->execute();
 
 // Close connection
 $conn = null;
-
 success(TRUE);
+
 
 ?>

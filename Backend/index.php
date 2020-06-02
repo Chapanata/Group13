@@ -22,15 +22,21 @@ if(isset($_SESSION['current_uid']))
 
                 <div class="login-box"> <!-- Our Front -->
                     <img src="CSS/Logo.png" class="logo"/>
-                    <div class="button-select">
+
+					<?php
+					if (!isset($_GET['Task']))
+					{
+
+						?>
+
+					 <div class="button-select">
                         <div class="button-color"></div>
                         <button id="login-butt" type="button" class="toggle-log">Login</button>
                         <button id="register-butt" type="button" class="toggle-reg">Register</button>
                     </div>
-                    <!-- Login -->
-
+					 <!-- Login -->
                     <form id="login" action="" method="post" class="input-group">
-                        <div id="rtnlogin" style="text-align:center;color:red;"></div>
+                        <div id="rtnlogin" style="text-align:center;color:green;"><?php echo (isset($_GET['success']))?$_GET['success']:""; ?></div>
                         <div class="input-box">
                             <input type="text"  name="Email" placeholder="E-mail Address" required>
 
@@ -65,6 +71,45 @@ if(isset($_SESSION['current_uid']))
                             <h5 id="confirmpassword" style="padding: 8px;">Passwords do not match. Please reconfirm password.</h5>
                         </div>
                     </form>
+
+						<!-- Reset via Email -->
+					 <form id="resetform" action="" method="post" class="input-group">
+                        <div id="rtnreset" style="text-align:center;color:red;"></div>
+						  <br>
+                        <div class="input-box">
+                            <input type="email"  name="Email" placeholder="E-mail Address" required>
+
+                        </div>
+						 <br>
+						 <input type="button" id="sendcode" class="submit-btn" value="Reset Password">
+                        <br/>
+						  <br>
+                        <a class="back" href="#">I Have An Account</a>
+
+                    </form>
+				<?php }else{ ?>
+					    <form id="resetpass" method="post" class="input-group" >
+                        <div id="rtnpass" style="text-align:center;color:red;"></div>
+                        <div class="register-box">
+
+                            <input type="password" id="password" name="Password" placeholder="New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one uppercase and lowercase letter, and at least 8 or more characters" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Follow Password Requirements' : ''); if(this.checkValidity()) form.confirm.pattern = this.value;" required>
+                            <input type="password" id="confirm" name="Confirm" placeholder="Confirm New Password" pattern="(?=.*[a-z])(?=.*[A-Z]).{8,}"title="Confirm Password" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Passwords do not match' : '');" required>
+							<input type="hidden" name="Email" value="<?php echo $_GET['Email']; ?>">
+							<input type="hidden" name="Code" value="<?php echo $_GET['Code']; ?>">
+							<input type="hidden" name="Task" value="<?php echo $_GET['Task']; ?>">
+                        </div>
+                        <input type="button" id="resetpassword" class="submit-btn" name="" value="Reset Password">
+                        <div id="message">
+                            <h6>Password must contain the following:</h6>
+                            <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                            <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                            <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                            <h5 id="confirmpassword" style="padding: 8px;">Passwords do not match. Please reconfirm password.</h5>
+                        </div>
+                    </form>
+					<?php } ?>
+
+
                 </div>
                 <script>
                     var passwordInput = document.getElementById("password");
@@ -72,7 +117,6 @@ if(isset($_SESSION['current_uid']))
                     var letter = document.getElementById("letter");
                     var capital = document.getElementById("capital");
                     var length = document.getElementById("length");
-
 
                     passwordInput.onfocus = function() {
                         document.getElementById("message").style.display = "block";
@@ -206,7 +250,69 @@ if(isset($_SESSION['current_uid']))
 						}
 
 					 });
+						$("#sendcode").on('click', function(){
 
+
+                            $.ajax({
+                                url: '/ContactDeluxe/Endpoints/forgotPassword.php',
+                                type : "POST",
+                                dataType : 'json', // data type
+                                data: JSON.stringify($('#resetform').serializeObject()),
+                                contentType: 'application/json;charset=UTF-8',
+                                success : function(result) {
+
+									$("#rtnreset").text("Reset Code Sent");
+									$("#rtnreset").css("color","green");
+                                   // window.location.href = "user.php";
+
+                                },
+                                error: function(xhr, resp, text) {
+                                    console.log(xhr, resp, text);
+
+                                    var obj = JSON.parse(xhr.responseText);
+                                    console.log(obj.Error);
+									$("#rtnreset").css("color","red");
+                                    $("#rtnreset").text(obj.Error);
+
+
+                                }
+                            })
+
+
+
+
+
+					 });
+						$("#resetpassword").on('click',function(){
+						if (letter.classList.contains("valid") && capital.classList.contains("valid") && length.classList.contains("valid"))
+						{
+							  $.ajax({
+                                url: '/ContactDeluxe/Endpoints/resetPassword.php',
+                                type : "POST",
+                                dataType : 'json', // data type
+                                data: JSON.stringify($('#resetpass').serializeObject()),
+                                contentType: 'application/json;charset=UTF-8',
+                                success : function(result) {
+
+
+                                   	window.location.href = "index.php?&Success=Password Reset";
+
+                                },
+                                error: function(xhr, resp, text) {
+                                    console.log(xhr, resp, text);
+
+                                    var obj = JSON.parse(xhr.responseText);
+                                    console.log(obj.Error);
+									$("#rtnpass").css("color","red");
+                                    $("#rtnpass").text(obj.Error);
+
+
+                                }
+                            })
+
+						}
+
+						});
 
                     });
                 </script>
