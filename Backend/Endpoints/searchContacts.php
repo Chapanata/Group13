@@ -48,7 +48,7 @@ else
 
 if ($SearchLength > 0)
 {
-	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' AND (FirstName LIKE '".$SearchQuery."%' OR LastName LIKE '".$SearchQuery."%' OR Email LIKE '".$SearchQuery."%' OR Address LIKE '".$SearchQuery."%' OR PhoneNumber LIKE '".$SearchQuery."%') ORDER BY LastUpdated DESC LIMIT 10");
+	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' AND (FirstName LIKE '%".$SearchQuery."%' OR LastName LIKE '%".$SearchQuery."%' OR Email LIKE '%".$SearchQuery."%' OR Address LIKE '%".$SearchQuery."%' OR PhoneNumber LIKE '%".$SearchQuery."%') ORDER BY LastUpdated DESC LIMIT 10");
 }
 else
 {
