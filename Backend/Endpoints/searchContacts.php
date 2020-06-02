@@ -8,7 +8,7 @@ header('Content-Type: application/json');
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-if (!isset(data->SearchQuery))
+if (!isset($data->SearchQuery))
 {
 	error("Missing SearchQuery Parameter");
 	die();
@@ -48,11 +48,11 @@ else
 
 if ($SearchLength > 0)
 {
-	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' AND (FirstName LIKE '".$SearchQuery."%' OR LastName LIKE '".$SearchQuery."%' OR Email LIKE '".$SearchQuery."%' OR Address LIKE '".$SearchQuery."%' OR PhoneNumber LIKE '".$SearchQuery."%') ORDER BY LastUpdated DESC");
+	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' AND (FirstName LIKE '".$SearchQuery."%' OR LastName LIKE '".$SearchQuery."%' OR Email LIKE '".$SearchQuery."%' OR Address LIKE '".$SearchQuery."%' OR PhoneNumber LIKE '".$SearchQuery."%') ORDER BY LastUpdated DESC LIMIT 10");
 }
 else
 {
-	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' ORDER BY LastUpdated DESC");
+	$result = $conn->prepare("SELECT * FROM $ContactsTbl WHERE OwnerID='$currentUser' ORDER BY LastUpdated DESC LIMIT 10");
 }
 
 $result->execute();
